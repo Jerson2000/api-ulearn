@@ -40,7 +40,7 @@ public class TokenService(IOptions<JwtSettings> options, ULearnDbContext dbConte
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes),
+            expires: DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(jwt);

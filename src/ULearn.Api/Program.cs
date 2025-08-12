@@ -8,6 +8,10 @@ using ULearn.Infrastructure.DependencyInjection;
 using ULearn.Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
+// Load env
+DotNetEnv.Env.Load();
+DotNetEnv.Env.TraversePath().Load();
+
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddInfrastructureServices(builder.Configuration).AddApplicationServices(builder.Configuration);
@@ -21,7 +25,7 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<CustomValidationFilter>();
 });
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddJWTConfiguration(builder.Configuration);
+builder.Services.AddJWTConfiguration(builder.Configuration).AddCacheConfig();
 
 var app = builder.Build();
 app.UseExceptionHandler(_ => { });

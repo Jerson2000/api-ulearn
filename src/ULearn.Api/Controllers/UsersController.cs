@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
 
@@ -6,9 +7,10 @@ namespace ULearn.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(IUserService userService) : ControllerBase
+public class UsersController(IUserService userService,IDistributedCache distributedCache) : ControllerBase
 {
     private readonly IUserService _userService = userService;
+    private readonly IDistributedCache _distributedCache = distributedCache;
 
     [HttpGet]
     public async Task<IActionResult> GetAll()

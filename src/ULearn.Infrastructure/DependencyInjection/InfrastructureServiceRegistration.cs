@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ULearn.Domain.Interfaces.Repository;
 using ULearn.Domain.Interfaces.Services;
+using ULearn.Domain.Shared;
 using ULearn.Infrastructure.Data;
 using ULearn.Infrastructure.Data.Repositories;
 using ULearn.Infrastructure.Services;
@@ -16,10 +17,16 @@ public static class InfrastructureServiceRegistration
     {
         services.AddDbContext<ULearnDbContext>(option =>
         {
-            option.UseSqlServer(config.GetConnectionString("Default"));
+            option.UseSqlServer(EnvironmentValues.DB_CONNECTION);
         });
 
-        services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
+        services.Configure<JwtSettings>(options =>
+        {
+            options.Issuer = "ULearn";
+            options.Audience = "ULearnClient";
+            options.AccessTokenExpiryMinutes = 30;
+            options.Key = EnvironmentValues.JWT_KEY;
+        });
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITokenService, TokenService>();

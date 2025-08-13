@@ -23,23 +23,25 @@ public class UsersController(IUserService userService, IDistributedCache distrib
     {
         var key = "Users";
         var cachedData = await _distributedCache.GetStringAsync(key);
+
         if (!string.IsNullOrEmpty(cachedData))
         {
-            var usersCached = CacheHelper.DeserializeFromBytes<Object>(cachedData);
+            var usersCached = CacheHelper.DeserializeFromBase64<List<UserDto>>(cachedData);
             Console.WriteLine("Cached return");
             return Ok(usersCached);
         }
+
         var users = await _userService.GetAllAsync();
         if (users.Count > 0)
         {
-            var serializedUsers = CacheHelper.SerializeToBytes(users);
+            var base64String = CacheHelper.SerializeToBase64(users);
             var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
 
-            await _distributedCache.SetAsync(key, serializedUsers, options);
+            await _distributedCache.SetStringAsync(key, base64String, options);
         }
+
         Console.WriteLine("Dili cached return");
         return Ok(users);
-
     }
 
 

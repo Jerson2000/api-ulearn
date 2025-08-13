@@ -20,7 +20,7 @@ public class UserService(IUserRepository repository) : IUserService
 
     public Task DeleteAsync(Guid id) => _repository.DeleteAsync(id);
 
-    public async Task<IEnumerable<UserDto>> GetAllAsync() => (await _repository.GetAllAsync()).Select(x => new UserDto(x.Id, x.FirstName, x.LastName, x.Email, x.Password, x.CreatedAt));
+    public async Task<IReadOnlyList<UserDto>> GetAllAsync() => (await _repository.GetAllAsync()).Select(x => new UserDto(x.Id, x.FirstName, x.LastName, x.Email, x.Password, x.CreatedAt)).ToList();
 
     public async Task<UserDto?> GetByIdAsync(Guid id)
     {

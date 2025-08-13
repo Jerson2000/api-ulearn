@@ -2,6 +2,7 @@
 
 using System.Collections;
 using StackExchange.Redis;
+using ULearn.Domain.Shared;
 
 namespace ULearn.Api.Configurations;
 
@@ -13,11 +14,16 @@ public static class CacheConfig
         services.AddMemoryCache();
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = Environment.GetEnvironmentVariable("REDIS_HOST"); // Redis Host:Port
-            options.InstanceName = "RedisCache:";  // Optional, adds a prefix to cache keys
+            options.InstanceName = "RedisCache:";
             options.ConfigurationOptions = new ConfigurationOptions
             {
-                Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD")
+                EndPoints = { { EnvironmentValues.REDIS_HOST!, int.Parse(EnvironmentValues.REDIS_PORT ?? "6379") } },
+                Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD"),
+                AbortOnConnectFail = false,     
+                ConnectRetry = 5,
+                ConnectTimeout = 5000,
+                SyncTimeout = 5000,
+                Ssl = true
             };
         });
 

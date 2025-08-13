@@ -27,7 +27,7 @@ public class UserRepository(ULearnDbContext dbContext) : IUserRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<User>> GetAllAsync()
+    public async Task<IReadOnlyList<User>> GetAllAsync()
         => await _dbContext.Users.AsNoTracking().ToListAsync();
 
     public async Task<User?> GetByEmailAsync(string email)

@@ -4,7 +4,7 @@ namespace ULearn.Domain.Interfaces.Repository;
 
 public interface IUserRepository
 {
-    Task<IEnumerable<User>> GetAllAsync();
+    Task<IReadOnlyList<User>> GetAllAsync();
     Task<User?> GetByIdAsync(Guid id);
     Task<User?> GetByEmailAsync(string email);
     Task<Guid> CreateAsync(User item);

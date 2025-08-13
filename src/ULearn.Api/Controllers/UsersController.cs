@@ -1,22 +1,45 @@
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using ULearn.Api.Utils;
 
 namespace ULearn.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(IUserService userService,IDistributedCache distributedCache) : ControllerBase
+public class UsersController(IUserService userService, IDistributedCache distributedCache) : ControllerBase
 {
     private readonly IUserService _userService = userService;
     private readonly IDistributedCache _distributedCache = distributedCache;
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
+        var key = "Users";
+        var cachedData = await _distributedCache.GetStringAsync(key);
+        if (!string.IsNullOrEmpty(cachedData))
+        {
+            var usersCached = CacheHelper.DeserializeFromBytes<Object>(cachedData);
+            Console.WriteLine("Cached return");
+            return Ok(usersCached);
+        }
         var users = await _userService.GetAllAsync();
+        if (users.Count > 0)
+        {
+            var serializedUsers = CacheHelper.SerializeToBytes(users);
+            var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
+
+            await _distributedCache.SetAsync(key, serializedUsers, options);
+        }
+        Console.WriteLine("Dili cached return");
         return Ok(users);
+
     }
 
 

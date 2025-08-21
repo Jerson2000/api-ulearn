@@ -1,14 +1,15 @@
 
 using ULearn.Application.DTOs;
+using ULearn.Domain.Shared;
 
 namespace ULearn.Application.Interfaces;
 
 public interface IUserService
 {
-    Task<IReadOnlyList<UserDto>> GetAllAsync();
-    Task<UserDto?> GetByIdAsync(Guid id);
-    Task<UserDto?> GetByEmailAsync(string email);
-    Task<Guid> CreateAsync(CreateUserDto dto);
-    Task UpdateAsync(Guid id, CreateUserDto dto);
-    Task DeleteAsync(Guid id);
+    Task<Result<IReadOnlyList<UserDto>>> GetAllAsync();
+    Task<Result<UserDto?>> GetByIdAsync(Guid id);
+    Task<Result<UserDto?>> GetByEmailAsync(string email);
+    Task<Result<Guid>> CreateAsync(CreateUserDto dto);
+    Task<Result> UpdateAsync(Guid id, CreateUserDto dto);
+    Task<Result> DeleteAsync(Guid id);
 }

@@ -7,49 +7,42 @@ using ULearn.Application.Interfaces;
 using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using ULearn.Api.Utils;
+using Microsoft.Extensions.Caching.Memory;
+using ULearn.Api.Extensions;
 
 namespace ULearn.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(IUserService userService, IDistributedCache distributedCache) : ControllerBase
+public class UsersController(IUserService userService, IDistributedCache distributedCache, IMemoryCache memoryCache) : ControllerBase
 {
     private readonly IUserService _userService = userService;
     private readonly IDistributedCache _distributedCache = distributedCache;
+    private readonly IMemoryCache _memoryCache = memoryCache;
 
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        var key = "Users";
-        var cachedData = await _distributedCache.GetStringAsync(key);
-
-        if (!string.IsNullOrEmpty(cachedData))
-        {
-            var usersCached = CacheHelper.DeserializeFromBase64<List<UserDto>>(cachedData);
-            Console.WriteLine("Cached return");
-            return Ok(usersCached);
-        }
-
-        var users = await _userService.GetAllAsync();
-        if (users.Count > 0)
-        {
-            var base64String = CacheHelper.SerializeToBase64(users);
-            var options = new DistributedCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(1));
-
-            await _distributedCache.SetStringAsync(key, base64String, options);
-        }
-
-        Console.WriteLine("Dili cached return");
-        return Ok(users);
+        string cacheKey = "users:all";
+        return await _userService.GetAllAsync()
+            .ToDistributedCachedActionResult(
+                cache: _distributedCache,
+                cacheKey: cacheKey,
+                cacheOptions: new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                });
     }
 
 
     [HttpGet("{id:guid}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetUserById([FromRoute] Guid id)
     {
-        var item = await _userService.GetByIdAsync(id);
-        return Ok(item);
+        string cacheKey = id.ToString();
+
+        return await _userService.GetByIdAsync(id).ToMemoryCachedActionResult(_memoryCache, cacheKey);
     }
 
     [HttpPost]

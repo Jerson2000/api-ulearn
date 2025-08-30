@@ -1,12 +1,8 @@
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
-using Newtonsoft.Json;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using ULearn.Api.Utils;
 using Microsoft.Extensions.Caching.Memory;
 using ULearn.Api.Extensions;
 
@@ -24,15 +20,8 @@ public class UsersController(IUserService userService, IDistributedCache distrib
     [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
-        string cacheKey = "users:all";
-        return await _userService.GetAllAsync()
-            .ToDistributedCachedActionResult(
-                cache: _distributedCache,
-                cacheKey: cacheKey,
-                cacheOptions: new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-                });
+        var users = await _userService.GetAllAsync();
+        return users.ToActionResult();
     }
 
 
@@ -40,29 +29,28 @@ public class UsersController(IUserService userService, IDistributedCache distrib
     [AllowAnonymous]
     public async Task<IActionResult> GetUserById([FromRoute] Guid id)
     {
-        string cacheKey = id.ToString();
-
-        return await _userService.GetByIdAsync(id).ToMemoryCachedActionResult(_memoryCache, cacheKey);
+        var user = await _userService.GetByIdAsync(id);
+        return user.ToActionResult();
     }
 
     [HttpPost]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
     {
-        await _userService.CreateAsync(dto);
-        return Ok();
+        var user = await _userService.CreateAsync(dto);
+        return user.ToActionResult();
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] CreateUserDto dto)
     {
-        await _userService.UpdateAsync(id, dto);
-        return Ok();
+        var user = await _userService.UpdateAsync(id, dto);
+        return user.ToActionResult();
     }
 
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
-        await _userService.DeleteAsync(id);
-        return Ok();
+        var user = await _userService.DeleteAsync(id);
+        return user.ToActionResult();
     }
 }

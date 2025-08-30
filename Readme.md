@@ -6,7 +6,7 @@ Aims to demonstrate the **Domain Driven Design Architecture (DDD)** and best pra
 ### 📌 To Do
 - [x] JWT
 - [x] Role-Based Access Control (RBAC)
-- [ ] Caching (memory & redis)
+- [x] Caching (memory & redis)
 - [ ] Rate Limiting
 - [ ] Cross Site Request Forgery
 - [ ] E-Mail Services

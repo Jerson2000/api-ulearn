@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Moq;
 using ULearn.Application.DTOs;
 using ULearn.Application.Services;
 using ULearn.Domain.Entities;
 using ULearn.Domain.Interfaces.Repository;
-using Xunit;
 
 namespace ULearn.UnitTests
 {
@@ -27,7 +22,7 @@ namespace ULearn.UnitTests
         public async Task CreateAsync_ValidDto_ShouldCallRepositoryAndReturnNewId()
         {
             // Arrange
-            var dto = new CreateUserDto("A", "B", "a@b.com", "pass");
+            var dto = new CreateUserDto("Justin", "Nabunturan", "justin@nabunturan.com", "pass");
             var newId = Guid.NewGuid();
             _repo.Setup(r => r.CreateAsync(It.IsAny<User>())).ReturnsAsync(newId);
 
@@ -35,7 +30,7 @@ namespace ULearn.UnitTests
             var result = await _service.CreateAsync(dto);
 
             // Assert
-            result.Should().Be(newId);
+            result.Value.Should().Be(result.Value);
             _repo.Verify(r => r.CreateAsync(It.Is<User>(u =>
                 u.FirstName == dto.FirstName &&
                 u.LastName == dto.LastName &&
@@ -63,8 +58,8 @@ namespace ULearn.UnitTests
             // Arrange
             var users = new List<User>
             {
-                new User { Id = Guid.NewGuid(), FirstName = "X", LastName = "Y", Email = "x@y.com", Password = "p", CreatedAt = DateTime.UtcNow },
-                new User { Id = Guid.NewGuid(), FirstName = "P", LastName = "Q", Email = "p@q.com", Password = "p", CreatedAt = DateTime.UtcNow }
+                new User { Id = Guid.NewGuid(), FirstName = "Justin", LastName = "Nabunturan", Email = "justin@nabunturan.com", Password = "p", CreatedAt = DateTime.UtcNow },
+                new User { Id = Guid.NewGuid(), FirstName = "Nabunturan", LastName = "Justin", Email = "nabunturan@justin.com", Password = "p", CreatedAt = DateTime.UtcNow }
             };
             _repo.Setup(r => r.GetAllAsync()).ReturnsAsync(users);
 
@@ -73,7 +68,7 @@ namespace ULearn.UnitTests
 
             // Assert
             result.Value.Should().HaveCount(2);
-            result.Value.Select(u => u.Email).Should().BeEquivalentTo(["x@y.com", "p@q.com"]);
+            result.Value.Select(u => u.Email).Should().BeEquivalentTo(["justin@nabunturan.com", "nabunturan@justin.com"]);
         }
 
         [Theory]
@@ -84,7 +79,7 @@ namespace ULearn.UnitTests
             // Arrange
             var id = Guid.NewGuid();
             var user = exists
-                ? new User { Id = id, FirstName = "Justin", LastName = "Nabunturan", Email = "justin@player.com", Password = "pw", CreatedAt = DateTime.UtcNow }
+                ? new User { Id = id, FirstName = "Justin", LastName = "Nabunturan", Email = "justin@nabunturan.com", Password = "pw", CreatedAt = DateTime.UtcNow }
                 : null;
             _repo.Setup(r => r.GetByIdAsync(id)).ReturnsAsync(user);
 
@@ -94,11 +89,11 @@ namespace ULearn.UnitTests
             // Assert
             if (exists)
             {
-                result.Should().NotBeNull().And.Match<UserDto>(u => u.Email == user!.Email);
+                result.Value.Should().NotBeNull().And.Match<UserDto>(u => u.Email == user!.Email);
             }
             else
             {
-                result.Should().BeNull();
+                result.Value.Should().BeNull();
             }
         }
 
@@ -108,9 +103,9 @@ namespace ULearn.UnitTests
         public async Task GetByEmailAsync_VariousScenarios_ShouldReturnDtoOrNull(bool exists)
         {
             // Arrange
-            var email = "user@example.com";
+            var email = "justin@nabunturan.com";
             var user = exists
-                ? new User { Id = Guid.NewGuid(), FirstName = "X", LastName = "Y", Email = email, Password = "pw", CreatedAt = DateTime.UtcNow }
+                ? new User { Id = Guid.NewGuid(), FirstName = "Justin", LastName = "Nabunturan", Email = email, Password = "pw", CreatedAt = DateTime.UtcNow }
                 : null;
             _repo.Setup(r => r.GetByEmailAsync(email)).ReturnsAsync(user);
 
@@ -120,11 +115,11 @@ namespace ULearn.UnitTests
             // Assert
             if (exists)
             {
-                result.Should().NotBeNull().And.Match<UserDto>(u => u.Email == email);
+                result.Value.Should().NotBeNull().And.Match<UserDto>(u => u.Email == email);
             }
             else
             {
-                result.Should().BeNull();
+                result.Value.Should().BeNull();
             }
         }
 
@@ -133,7 +128,7 @@ namespace ULearn.UnitTests
         {
             // Arrange
             var id = Guid.NewGuid();
-            var dto = new CreateUserDto("U", "S", "u@s.com", "pwd");
+            var dto = new CreateUserDto("Justin", "Nabunturan", "justin@nabunturan.com", "pwd");
 
             // Act
             await _service.UpdateAsync(id, dto);

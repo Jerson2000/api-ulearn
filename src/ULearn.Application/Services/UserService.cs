@@ -1,7 +1,8 @@
-using Microsoft.Extensions.Caching.Distributed;
+using System.Net;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
 using ULearn.Domain.Entities;
+using ULearn.Domain.Enums;
 using ULearn.Domain.Interfaces.Repository;
 using ULearn.Domain.Shared;
 
@@ -20,7 +21,7 @@ public class UserService(IUserRepository repository) : IUserService
     public async Task<Result> DeleteAsync(Guid id)
     {
         var user = _repository.GetByIdAsync(id);
-        if (user is null) Result.Failure(new Error(400, "Couldn't delete."));
+        if (user is null) Result.Failure(new Error(ErroCodeEnum.BadRequest, "Couldn't delete."));
         await _repository.DeleteAsync(id);
         return Result.Success();
     }
@@ -50,7 +51,7 @@ public class UserService(IUserRepository repository) : IUserService
     public async Task<Result> UpdateAsync(Guid id, CreateUserDto dto)
     {
         var exist = await _repository.GetByIdAsync(id);
-        if (exist is null) Result.Failure(new Error(400, "Couldn't update."));
+        if (exist is null) Result.Failure(new Error(ErroCodeEnum.BadRequest, "Couldn't update."));
         var user = new User { Id = id, FirstName = dto.FirstName, LastName = dto.LastName, Email = dto.Email, Password = dto.Password, CreatedAt = DateTime.Now };
         await _repository.UpdateAsync(user);
         return Result.Success();

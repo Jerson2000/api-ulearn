@@ -1,21 +1,23 @@
+using ULearn.Domain.Enums;
+
 namespace ULearn.Domain.Shared
 {
     public class Error : IEquatable<Error>
     {
-        public static readonly Error None = new(0, string.Empty);
-        public static readonly Error NullValue = new(1001, "The specified result value is null.");
+        public static readonly Error None = new(ErroCodeEnum.Ok, string.Empty);
+        public static readonly Error NullValue = new(ErroCodeEnum.NullValueError, "The specified result value is null.");
 
-        public Error(int code, string message)
+        public Error(ErroCodeEnum code, string message)
         {
             Code = code;
             Message = message;
         }
 
-        public int Code { get; }
+        public ErroCodeEnum Code { get; }
 
         public string Message { get; }
 
-        public static implicit operator int(Error error) => error.Code;
+        public static implicit operator ErroCodeEnum(Error error) => error.Code;
 
         public static bool operator ==(Error? a, Error? b)
         {

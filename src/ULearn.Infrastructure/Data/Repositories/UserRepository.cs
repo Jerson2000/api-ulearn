@@ -1,14 +1,17 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using ULearn.Domain.Entities;
-using ULearn.Domain.Exceptions;
 using ULearn.Domain.Interfaces.Repository;
-using ULearn.Infrastructure.Data;
+using ULearn.Domain.Interfaces.Services;
+using ULearn.Infrastructure.Utils;
 
 namespace ULearn.Infrastructure.Data.Repositories;
 
-public class UserRepository(ULearnDbContext dbContext) : IUserRepository
+public class UserRepository(ULearnDbContext dbContext, ICacheService cacheService) : IUserRepository
 {
     private readonly ULearnDbContext _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+    private readonly ICacheService _cacheService = cacheService;
 
     public async Task<Guid> CreateAsync(User user)
     {
@@ -19,34 +22,44 @@ public class UserRepository(ULearnDbContext dbContext) : IUserRepository
 
     public async Task DeleteAsync(Guid id)
     {
-        var entity = await _dbContext.Users.FindAsync(id);
-        if (entity is null)
-            throw new NotFoundException($"User with ID '{id}' not found.");
-
-        _dbContext.Users.Remove(entity);
+        _dbContext.Users.Remove(new User { Id = id });
         await _dbContext.SaveChangesAsync();
     }
 
     public async Task<IReadOnlyList<User>> GetAllAsync()
-        => await _dbContext.Users.AsNoTracking().ToListAsync();
+    {
+        var cacheKey = CacheHelper.GenerateCacheKey<User>("all");
+        var cacheDuration = TimeSpan.FromMinutes(1);
+        return await _cacheService.GetOrSetAsync<List<User>?>(
+            cacheKey,
+            async () => await _dbContext.Users.AsNoTracking().ToListAsync(),
+            cacheDuration
+        ) ?? new();
+    }
 
     public async Task<User?> GetByEmailAsync(string email)
-        => await _dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Email == email);
-
+    {
+        var cacheKey = CacheHelper.GenerateCacheKey<User>($"email:{email}");
+        var cacheDuration = TimeSpan.FromMinutes(1);
+        return await _cacheService.GetOrSetAsync(
+            cacheKey,
+            async () => await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email),
+            cacheDuration
+        );
+    }
     public async Task<User?> GetByIdAsync(Guid id)
-        => await _dbContext.Users
-            .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.Id == id);
-
+    {
+        var cacheKey = CacheHelper.GenerateCacheKey<User>($"id:{id}");
+        var cacheDuration = TimeSpan.FromMinutes(1);
+        return await _cacheService.GetOrSetAsync(
+            cacheKey,
+            async () => await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id),
+            cacheDuration
+        );
+    }
     public async Task UpdateAsync(User user)
     {
-        var existing = await _dbContext.Users.FindAsync(user.Id);
-        if (existing is null)
-            throw new NotFoundException($"User with ID '{user.Id}' not found.");
-
-        _dbContext.Entry(existing).CurrentValues.SetValues(user);
+        _dbContext.Set<User>().Update(user);
         await _dbContext.SaveChangesAsync();
     }
 }

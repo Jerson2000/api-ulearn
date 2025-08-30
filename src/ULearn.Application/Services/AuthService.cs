@@ -1,6 +1,7 @@
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
 using ULearn.Domain.Entities;
+using ULearn.Domain.Enums;
 using ULearn.Domain.Interfaces.Repository;
 using ULearn.Domain.Interfaces.Services;
 using ULearn.Domain.Shared;
@@ -20,7 +21,7 @@ public class AuthService(IUserRepository userRepository, ITokenService tokenServ
         var user = await _userRepository.GetByEmailAsync(dto.Email);
 
         if (user is null || !BBCrypt.Verify(dto.Password, user.Password))
-            return Result.Failure<AuthResponse>(new Error(400, "Wrong Email/Password!"));
+            return Result.Failure<AuthResponse>(new Error(ErroCodeEnum.BadRequest, "Wrong Email/Password!"));
 
         var token = _tokenService.GenerateToken(user);
         var refreshToken = _tokenService.GenerateRefreshToken(user);

@@ -14,8 +14,8 @@ DotNetEnv.Env.TraversePath().Load();
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddInfrastructureServices(builder.Configuration).AddApplicationServices(builder.Configuration);
 builder.Services.AddJWTConfiguration(builder.Configuration).AddCacheConfig();
+builder.Services.AddInfrastructureServices(builder.Configuration).AddApplicationServices(builder.Configuration);
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;

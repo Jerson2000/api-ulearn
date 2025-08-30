@@ -14,25 +14,31 @@ public static class CacheConfig
     {
         services.AddMemoryCache();
         services.Configure<MemoryCacheOptions>(options =>
-        {       
-            options.SizeLimit = 1024;    
-            options.CompactionPercentage = 0.15; 
+        {
+            options.SizeLimit = 1024;
+            options.CompactionPercentage = 0.15;
         });
 
-        services.AddStackExchangeRedisCache(options =>
+        if (EnvironmentValues.IS_REDIS_CACHED_ENABLE)
         {
-            options.InstanceName = "RedisCache:";
-            options.ConfigurationOptions = new ConfigurationOptions
+            services.AddStackExchangeRedisCache(options =>
             {
-                EndPoints = { { EnvironmentValues.REDIS_HOST!, int.Parse(EnvironmentValues.REDIS_PORT ?? "6379") } },
-                Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD"),
-                AbortOnConnectFail = false,
-                ConnectRetry = 5,
-                ConnectTimeout = 5000,
-                SyncTimeout = 5000,
-                Ssl = true
-            };
-        });
+                options.InstanceName = "RedisCache:";
+                options.ConfigurationOptions = new ConfigurationOptions
+                {
+                    EndPoints = { { EnvironmentValues.REDIS_HOST!, int.Parse(EnvironmentValues.REDIS_PORT ?? "6379") } },
+                    Password = Environment.GetEnvironmentVariable("REDIS_PASSWORD"),
+                    AbortOnConnectFail = false,
+                    ConnectRetry = 5,
+                    ConnectTimeout = 5000,
+                    SyncTimeout = 5000,
+                    Ssl = true
+                };
+            });
+        }else services.AddDistributedMemoryCache();
+
+        
+
 
         return services;
     }

@@ -28,6 +28,7 @@ public static class InfrastructureServiceRegistration
             options.Key = EnvironmentValues.JWT_KEY;
         });
 
+        services.AddTransient<ICacheService, CacheService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITokenService, TokenService>();
         return services;

@@ -2,14 +2,25 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ULearn.Domain.Shared;
+using ULearn.Infrastructure.Settings;
 
-namespace ULearn.Api.Configurations;
+namespace ULearn.Infrastructure.Configurations;
 
 public static class JwtConfig
 {
-    public static IServiceCollection AddJWTConfiguration(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddJWTConfig(this IServiceCollection services, IConfiguration config)
     {
+        services.Configure<JwtSettings>(_ => { });
+        var settings = services.BuildServiceProvider()
+                                   .GetRequiredService<IOptions<JwtSettings>>()
+                                   .Value;
+
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -23,9 +34,9 @@ public static class JwtConfig
                 ValidateAudience = true,
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
-                ValidIssuer = config["JwtSettings:Issuer"],
-                ValidAudience = config["JwtSettings:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
+                ValidIssuer = settings.Issuer,
+                ValidAudience = settings.Issuer,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key!)),
                 RequireSignedTokens = true,
                 RoleClaimType = ClaimTypes.Role
             };
@@ -53,7 +64,6 @@ public static class JwtConfig
             .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build());
-
 
         return services;
     }

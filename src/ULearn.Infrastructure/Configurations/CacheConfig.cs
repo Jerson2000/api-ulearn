@@ -1,11 +1,12 @@
 
 
-using System.Collections;
+
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using ULearn.Domain.Shared;
 
-namespace ULearn.Api.Configurations;
+namespace ULearn.Infrastructure.Configurations;
 
 public static class CacheConfig
 {

@@ -16,4 +16,8 @@ public class CacheService(IMemoryCache memoryCache, IDistributedCache distribute
     {
         return await CacheHelper.GetOrSetCacheAsync(key, _memoryCache, _distributedCache, factory, duration);
     }
+    public async Task RemoveCacheAsync(string cacheKey)
+    {
+        await CacheHelper.RemoveCacheAsync(cacheKey, _memoryCache, _distributedCache);
+    }
 }

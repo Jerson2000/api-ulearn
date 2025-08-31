@@ -5,7 +5,6 @@ using ULearn.Api.Middlewares;
 using ULearn.Api.Filters;
 using Microsoft.AspNetCore.Mvc;
 using ULearn.Infrastructure.DependencyInjection;
-using ULearn.Api.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 // Load env
@@ -14,7 +13,6 @@ DotNetEnv.Env.TraversePath().Load();
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddJWTConfiguration(builder.Configuration).AddCacheConfig();
 builder.Services.AddInfrastructureServices(builder.Configuration).AddApplicationServices(builder.Configuration);
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -29,13 +27,12 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 app.UseExceptionHandler(_ => { });
+app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseRateLimiter();
+// app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseHttpsRedirection();
-
-
 app.MapControllers();
 
 app.Run();

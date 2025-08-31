@@ -34,6 +34,22 @@ public static class CacheHelper
         return $"{typeName}:{key}";
     }
 
+    public static async Task RemoveCacheAsync(
+    string cacheKey,
+    IMemoryCache memCache,
+    IDistributedCache distributedCache,
+    CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(cacheKey))
+            throw new ArgumentException("Cache key must be non-empty.", nameof(cacheKey));
+
+        if (EnvironmentValues.IS_REDIS_CACHED_ENABLE)
+            await distributedCache.RemoveAsync(cacheKey, cancellationToken);
+        else
+            memCache.Remove(cacheKey);
+    }
+
+
     public static async Task<T> GetOrSetCacheAsync<T>(
         string cacheKey,
         IMemoryCache memCache,
@@ -97,7 +113,7 @@ public static class CacheHelper
                 options.SetAbsoluteExpiration(cacheDuration.Value);
 
             options.SetSize(serializedData.Length);
-            
+
             memCache.Set(cacheKey, data, options);
         }
 

@@ -8,7 +8,7 @@ Aims to demonstrate the **Domain Driven Design Architecture (DDD)** and best pra
 - [x] Role-Based Access Control (RBAC)
 - [x] Caching (memory & redis)
 - [x] Rate Limiting
-- [ ] Cross Site Request Forgery
+- [x] Prevent Cross Site Request Forgery
 - [ ] E-Mail Services
 - [ ] Websocket
 - [ ] Storage (local & 3rd party)

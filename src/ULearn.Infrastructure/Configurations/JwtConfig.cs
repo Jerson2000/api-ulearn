@@ -35,7 +35,7 @@ public static class JwtConfig
                 ValidateIssuerSigningKey = true,
                 ValidateLifetime = true,
                 ValidIssuer = settings.Issuer,
-                ValidAudience = settings.Issuer,
+                ValidAudience = settings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key!)),
                 RequireSignedTokens = true,
                 RoleClaimType = ClaimTypes.Role
@@ -55,6 +55,12 @@ public static class JwtConfig
                 },
                 OnTokenValidated = ctx =>
                 {
+                    return Task.CompletedTask;
+                },
+                OnAuthenticationFailed = context =>
+                {
+                    // Log the exception or error
+                    Console.WriteLine($"Authentication failed: {context.Exception.Message}");
                     return Task.CompletedTask;
                 }
             };

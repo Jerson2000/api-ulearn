@@ -47,6 +47,9 @@ app.UseRateLimiter();
 // app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseAntiforgeryValidation();
+
 app.MapControllers();
 
 app.Run();

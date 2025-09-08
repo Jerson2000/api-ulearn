@@ -50,9 +50,8 @@ public class AuthController(IAuthService authService, IAntiforgery antiforgery) 
 
     [HttpPost("sample-request")]
     [AllowAnonymous]
-    public async Task<IActionResult> DoSomething()
+    public IActionResult DoSomething()
     {
-        await _antiforgery.ValidateRequestAsync(HttpContext);
         return Ok();
     }
 

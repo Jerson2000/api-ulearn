@@ -9,7 +9,7 @@ Aims to demonstrate the **Domain Driven Design Architecture (DDD)** and best pra
 - [x] Caching (memory & redis)
 - [x] Rate Limiting
 - [x] Prevent Cross Site Request Forgery
-- [ ] E-Mail Services
-- [ ] Websocket
+- [x] Websocket
+- [ ] E-Mail Service
 - [ ] Storage (local & 3rd party)
-- [ ] API Documentation
+- [x] API Documentation - Swagger

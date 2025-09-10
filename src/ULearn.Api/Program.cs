@@ -5,6 +5,7 @@ using ULearn.Api.Middlewares;
 using ULearn.Api.Filters;
 using Microsoft.AspNetCore.Mvc;
 using ULearn.Infrastructure.DependencyInjection;
+using ULearn.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 // Load env
@@ -25,7 +26,7 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAntiforgery(options =>
-{ 
+{
     var prefix = builder.Environment.IsDevelopment() ? "__Antiforgery-" : "__Host-Antiforgery";
     options.Cookie.Name = prefix + "Token";
 
@@ -38,6 +39,7 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.SameSite = SameSiteMode.Strict;
     options.HeaderName = "X-CSRF-TOKEN";
 });
+builder.Services.AddSwaggerDocumentation();
 
 var app = builder.Build();
 app.UseExceptionHandler(_ => { });
@@ -45,11 +47,13 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseRateLimiter();
 // app.UseCors();
+app.UseSwaggerDocumentation();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseAntiforgeryValidation();
-
+app.UseWebsocketMiddleware();
 app.MapControllers();
 
 app.Run();

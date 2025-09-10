@@ -60,13 +60,13 @@ public static class JwtConfig
                 OnAuthenticationFailed = context =>
                 {
                     // Log the exception or error
-                    Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                    // Console.WriteLine($"Authentication failed: {context.Exception.Message}");
                     return Task.CompletedTask;
                 }
             };
         });
         services.AddAuthorizationBuilder()
-            .AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"))
+            .AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"))
             .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build());

@@ -23,6 +23,7 @@ public static class InfrastructureServiceRegistration
         services.AddJWTConfig(config);
         services.AddCacheConfig();
         services.AddRateLimitConfig(config);
+        services.AddEmailConfig();
 
         services.AddTransient<ICacheService, CacheService>();
         services.AddScoped<IUserRepository, UserRepository>();

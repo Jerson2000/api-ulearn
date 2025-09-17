@@ -4,13 +4,15 @@ using ULearn.Application.Interfaces;
 using ULearn.Domain.Entities;
 using ULearn.Domain.Enums;
 using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Services;
 using ULearn.Domain.Shared;
 
 namespace ULearn.Application.Services;
 
-public class UserService(IUserRepository repository) : IUserService
+public class UserService(IUserRepository repository,IEmailService emailService) : IUserService
 {
     private readonly IUserRepository _repository = repository;
+    private readonly IEmailService _emailService = emailService;
     public async Task<Result<Guid>> CreateAsync(CreateUserDto dto)
     {
         var user = new User { Id = Guid.NewGuid(), FirstName = dto.FirstName, LastName = dto.LastName, Email = dto.Email, Password = dto.Password, CreatedAt = DateTime.Now };
@@ -30,7 +32,8 @@ public class UserService(IUserRepository repository) : IUserService
     {
         var users = (await _repository.GetAllAsync()).Select(x => new UserDto(x.Id, x.FirstName, x.LastName, x.Email, x.Password, x.CreatedAt))
             .ToList()
-            .AsReadOnly();    
+            .AsReadOnly();
+        await _emailService.SendEmailAsync("m9hcyxn@tempblockchain.com","Testing shit","Hello Madafaka");
         return Result.Success<IReadOnlyList<UserDto>>(users);
     }
 

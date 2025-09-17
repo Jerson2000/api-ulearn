@@ -4,6 +4,7 @@ using ULearn.Application.DTOs;
 using ULearn.Application.Services;
 using ULearn.Domain.Entities;
 using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Services;
 
 namespace ULearn.UnitTests
 {
@@ -11,11 +12,13 @@ namespace ULearn.UnitTests
     {
         private readonly Mock<IUserRepository> _repo;
         private readonly UserService _service;
+        private readonly Mock<IEmailService> _emailService;
 
         public UserServiceTests()
         {
             _repo = new Mock<IUserRepository>();
-            _service = new UserService(_repo.Object);
+            _emailService = new Mock<IEmailService>();
+            _service = new UserService(_repo.Object,_emailService.Object);
         }
 
         [Fact]

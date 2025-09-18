@@ -9,7 +9,7 @@ using ULearn.Domain.Shared;
 
 namespace ULearn.Application.Services;
 
-public class UserService(IUserRepository repository,IEmailService emailService) : IUserService
+public class UserService(IUserRepository repository, IEmailService emailService) : IUserService
 {
     private readonly IUserRepository _repository = repository;
     private readonly IEmailService _emailService = emailService;
@@ -33,7 +33,6 @@ public class UserService(IUserRepository repository,IEmailService emailService) 
         var users = (await _repository.GetAllAsync()).Select(x => new UserDto(x.Id, x.FirstName, x.LastName, x.Email, x.Password, x.CreatedAt))
             .ToList()
             .AsReadOnly();
-        await _emailService.SendEmailAsync("m9hcyxn@tempblockchain.com","Testing shit","Hello Madafaka");
         return Result.Success<IReadOnlyList<UserDto>>(users);
     }
 

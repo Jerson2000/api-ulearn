@@ -16,23 +16,18 @@ public class SmtpEmailService(string smtpServer, int smtpPort, string smtpUser, 
     public async Task SendEmailAsync(string to, string subject, string body)
     {
         var emailId = Guid.NewGuid();
-       
-            var message = CreateMessage(to, subject, body);
-            await SendMessageAsync(message, emailId);
-       
+        var message = CreateMessage(to, subject, body);
+        await SendMessageAsync(message, emailId);
     }
 
     public async Task SendBulkEmailAsync(IEnumerable<string> to, string subject, string body)
     {
         var recipients = to.ToList();
-        foreach (var batch in recipients)
-        {
-            var tasks = batch.Select(recipient => SendEmailAsync(batch, subject, body));
-            await Task.WhenAll(tasks);
-        }
+        var tasks = recipients.Select(recipient => SendEmailAsync(recipient, subject, body));
+        await Task.WhenAll(tasks);
     }
 
-    public Task SendEmailUsingTemplateAsync(string templateId, string recipient, 
+    public Task SendEmailUsingTemplateAsync(string templateId, string recipient,
         IDictionary<string, string> dynamicParameters)
     {
         throw new NotImplementedException();
@@ -41,12 +36,12 @@ public class SmtpEmailService(string smtpServer, int smtpPort, string smtpUser, 
     public async Task ScheduleEmailAsync(string to, string subject, string body, DateTime sendAt)
     {
         var delay = sendAt > DateTime.UtcNow ? sendAt - DateTime.UtcNow : TimeSpan.Zero;
-        
+
         if (delay > TimeSpan.Zero)
         {
             await Task.Delay(delay);
         }
-        
+
         await SendEmailAsync(to, subject, body);
     }
 

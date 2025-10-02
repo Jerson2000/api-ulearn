@@ -1,5 +1,6 @@
 using System.Net;
 using ULearn.Application.DTOs;
+using ULearn.Application.DTOs.Mappers;
 using ULearn.Application.Interfaces;
 using ULearn.Domain.Entities;
 using ULearn.Domain.Enums;
@@ -15,7 +16,7 @@ public class UserService(IUserRepository repository, IEmailService emailService)
     private readonly IEmailService _emailService = emailService;
     public async Task<Result<Guid>> CreateAsync(CreateUserDto dto)
     {
-        var user = new User { Id = Guid.NewGuid(), FirstName = dto.FirstName, LastName = dto.LastName, Email = dto.Email, Password = dto.Password, CreatedAt = DateTime.Now };
+        var user = dto.DtoToUserEntity();
         await _repository.CreateAsync(user);
         return Result.Success(user.Id);
     }
@@ -30,7 +31,7 @@ public class UserService(IUserRepository repository, IEmailService emailService)
 
     public async Task<Result<IReadOnlyList<UserDto>>> GetAllAsync()
     {
-        var users = (await _repository.GetAllAsync()).Select(x => new UserDto(x.Id, x.FirstName, x.LastName, x.Email, x.Password, x.CreatedAt))
+        var users = (await _repository.GetAllAsync()).Select(x => x.ToUserDto())
             .ToList()
             .AsReadOnly();
         return Result.Success<IReadOnlyList<UserDto>>(users);
@@ -40,22 +41,21 @@ public class UserService(IUserRepository repository, IEmailService emailService)
     {
 
         var user = await _repository.GetByEmailAsync(email);
-        return Result.Success(user is null ? null : new UserDto(user.Id, user.FirstName, user.LastName, user.Email, user.Password, user.CreatedAt));
+        return Result.Success(user?.ToUserDto());
 
     }
 
     public async Task<Result<UserDto?>> GetByIdAsync(Guid id)
     {
         var user = await _repository.GetByIdAsync(id);
-        return Result.Success(user is null ? null : new UserDto(user.Id, user.FirstName, user.LastName, user.Email, user.Password, user.CreatedAt));
+        return Result.Success(user?.ToUserDto());
     }
 
     public async Task<Result> UpdateAsync(Guid id, CreateUserDto dto)
     {
         var exist = await _repository.GetByIdAsync(id);
-        if (exist is null) Result.Failure(new Error(ErroCodeEnum.BadRequest, "Couldn't update."));
-        var user = new User { Id = id, FirstName = dto.FirstName, LastName = dto.LastName, Email = dto.Email, Password = dto.Password, CreatedAt = DateTime.Now };
-        await _repository.UpdateAsync(user);
+        if (exist is null) Result.Failure(new Error(ErroCodeEnum.BadRequest, "Couldn't update."));        
+        await _repository.UpdateAsync(dto.DtoToUserEntity(id));
         return Result.Success();
     }
 }

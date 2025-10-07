@@ -6,9 +6,9 @@ namespace ULearn.Application.Interfaces;
 
 public interface IUserService
 {
-    Task<Result<IReadOnlyList<UserDto>>> GetAllAsync();
-    Task<Result<UserDto?>> GetByIdAsync(Guid id);
-    Task<Result<UserDto?>> GetByEmailAsync(string email);
+    Task<Result<IReadOnlyList<UserResponseDto>>> GetAllAsync();
+    Task<Result<UserResponseDto?>> GetByIdAsync(Guid id);
+    Task<Result<UserResponseDto?>> GetByEmailAsync(string email);
     Task<Result<Guid>> CreateAsync(CreateUserDto dto);
     Task<Result> UpdateAsync(Guid id, CreateUserDto dto);
     Task<Result> DeleteAsync(Guid id);

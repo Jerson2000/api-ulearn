@@ -29,26 +29,26 @@ public class UserService(IUserRepository repository, IEmailService emailService)
         return Result.Success();
     }
 
-    public async Task<Result<IReadOnlyList<UserDto>>> GetAllAsync()
+    public async Task<Result<IReadOnlyList<UserResponseDto>>> GetAllAsync()
     {
-        var users = (await _repository.GetAllAsync()).Select(x => x.ToUserDto())
+        var users = (await _repository.GetAllAsync()).Select(x => x.ToUserResponseDto())
             .ToList()
             .AsReadOnly();
-        return Result.Success<IReadOnlyList<UserDto>>(users);
+        return Result.Success<IReadOnlyList<UserResponseDto>>(users);
     }
 
-    public async Task<Result<UserDto?>> GetByEmailAsync(string email)
+    public async Task<Result<UserResponseDto?>> GetByEmailAsync(string email)
     {
 
         var user = await _repository.GetByEmailAsync(email);
-        return Result.Success(user?.ToUserDto());
+        return Result.Success(user?.ToUserResponseDto());
 
     }
 
-    public async Task<Result<UserDto?>> GetByIdAsync(Guid id)
+    public async Task<Result<UserResponseDto?>> GetByIdAsync(Guid id)
     {
         var user = await _repository.GetByIdAsync(id);
-        return Result.Success(user?.ToUserDto());
+        return Result.Success(user?.ToUserResponseDto());
     }
 
     public async Task<Result> UpdateAsync(Guid id, CreateUserDto dto)

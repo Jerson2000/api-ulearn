@@ -32,14 +32,19 @@ public class AuthService(IUserRepository userRepository, ITokenService tokenServ
 
     public async Task<Result<AuthResponse>> Signup(CreateUserDto dto)
     {
+        var userExist = await _userRepository.GetByEmailAsync(dto.Email);
+        if (userExist is not null)
+            return Result.Failure<AuthResponse>(new Error(ErroCodeEnum.BadRequest, "Please choose another email!"));
+
         var hashPassword = BBCrypt.HashPassword(dto.Password);
         var newUser = new User { FirstName = dto.FirstName, LastName = dto.LastName, Email = dto.Email, Password = hashPassword };
+       
         await _userRepository.CreateAsync(newUser);
 
         var token = _tokenService.GenerateToken(newUser);
         var refreshToken = _tokenService.GenerateRefreshToken(newUser);
         var response = new AuthResponse(token, refreshToken);
-        
+
         return Result.Success(response);
     }
 }

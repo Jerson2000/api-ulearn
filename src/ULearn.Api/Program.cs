@@ -6,6 +6,7 @@ using ULearn.Api.Filters;
 using Microsoft.AspNetCore.Mvc;
 using ULearn.Infrastructure.DependencyInjection;
 using ULearn.Api.Extensions;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 // Load env
@@ -44,6 +45,12 @@ builder.Services.AddSwaggerDocumentation();
 var app = builder.Build();
 app.UseExceptionHandler(_ => { });
 app.UseHttpsRedirection();
+// app.UseStaticFiles(new StaticFileOptions
+// {
+//     FileProvider = new PhysicalFileProvider(
+//         Path.GetFullPath(Path.Combine(builder.Environment.ContentRootPath, "..", "..", "Uploads"))),
+//     RequestPath = "/Uploads"
+// });
 app.UseRouting();
 app.UseRateLimiter();
 // app.UseCors();

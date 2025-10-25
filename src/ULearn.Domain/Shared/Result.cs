@@ -1,5 +1,7 @@
 
 
+using ULearn.Domain.Enums;
+
 namespace ULearn.Domain.Shared;
 
 public class Result
@@ -33,6 +35,7 @@ public class Result
     public static Result Failure(Error error) => new(false, error);
 
     public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
+    public static Result<TValue> Failure<TValue>(ErroCodeEnum code,string message) => new(default, false, new Error(code,message));
 
     public static Result<TValue> Create<TValue>(TValue? value) => value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
 }

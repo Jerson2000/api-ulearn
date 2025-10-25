@@ -11,6 +11,7 @@ public static class ApplicationServiceRegistration
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IStorageAppService, StorageService>();
 
         // Validator
         services.AddValidatorsRegistration(config);

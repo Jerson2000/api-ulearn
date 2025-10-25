@@ -2,6 +2,7 @@
 
 
 using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ULearn.Application.DTOs;
@@ -15,6 +16,12 @@ public static class ApplicationValidatorRegistration
     {
         services.AddScoped<IValidator<CreateUserDto>, CreateUserDtoValidator>();
         services.AddScoped<IValidator<LoginDto>, UserLoginDtoValidator>();
+
+        // File Validator
+        services.AddScoped<IValidator<UploadFileRequestDto>, UploadFileRequestDtoValidator>();
+        services.AddScoped<IValidator<UploadFilesRequestDto>, UploadFilesRequestDtoValidator>();
+        services.AddScoped<IValidator<IFormFile>, IFormFileValidator>();
+
         return services;
     }
 }

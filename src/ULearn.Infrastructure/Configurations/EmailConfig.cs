@@ -21,7 +21,7 @@ public static class EmailConfig
 
         if (EnvironmentValues.EMAIL_PROVIDER == EmailProviderEnum.SMTP)
         {
-            Console.WriteLine($"{settings.Username}\t {settings.Password}");
+            // Console.WriteLine($"{settings.Username}\t {settings.Password}");
             services.AddSingleton<IEmailService>(provider =>
             new SmtpEmailService(
                 settings.Server,

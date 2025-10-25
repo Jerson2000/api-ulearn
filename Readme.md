@@ -11,5 +11,5 @@ Aims to demonstrate the **Domain Driven Design Architecture (DDD)** and best pra
 - [x] Prevent Cross Site Request Forgery
 - [x] Websocket
 - [x] E-Mail Service
-- [ ] Storage (local & 3rd party)
+- [x] Storage (local & 3rd party)
 - [x] API Documentation - Swagger

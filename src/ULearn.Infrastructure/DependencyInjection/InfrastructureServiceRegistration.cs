@@ -8,6 +8,7 @@ using ULearn.Infrastructure.Configurations;
 using ULearn.Infrastructure.Data;
 using ULearn.Infrastructure.Data.Repositories;
 using ULearn.Infrastructure.Services;
+using ULearn.Infrastructure.Services.Storages;
 
 namespace ULearn.Infrastructure.DependencyInjection;
 
@@ -28,6 +29,10 @@ public static class InfrastructureServiceRegistration
         services.AddTransient<ICacheService, CacheService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ITokenService, TokenService>();
+
+        services.AddKeyedTransient<IStorageService, LocalStorageService>("local");
+        services.AddKeyedTransient<IStorageService, ImagekitStorageService>("imagekitStorage");
+
 
         return services;
     }

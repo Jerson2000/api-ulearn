@@ -4,6 +4,6 @@ namespace ULearn.Domain.Interfaces.Services;
 
 public interface ITokenService
 {
-    string GenerateToken(User user);
-    string GenerateRefreshToken(User user);
+    Task<(string accessToken, string refreshToken)> GenerateJWTToken(User user, DateTime? tokenValidity = null);
+    Task<(string accessToken, string refreshToken)> GenerateJWTRefreshToken(string refreshToken, string expiredAccessToken);
 }

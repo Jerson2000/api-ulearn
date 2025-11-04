@@ -27,4 +27,6 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public string FullName => $"{FirstName} {LastName}";
+    
+    public ICollection<Token> Tokens { get; set; } = new List<Token>();
 }

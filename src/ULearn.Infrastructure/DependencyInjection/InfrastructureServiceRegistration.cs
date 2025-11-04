@@ -28,6 +28,7 @@ public static class InfrastructureServiceRegistration
 
         services.AddTransient<ICacheService, CacheService>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITokenRepository, TokenRepository>();
         services.AddScoped<ITokenService, TokenService>();
 
         services.AddKeyedTransient<IStorageService, LocalStorageService>("local");

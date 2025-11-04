@@ -67,8 +67,8 @@ public static class ResultExtensions
             ErroCodeEnum.Unauthorized => new UnauthorizedObjectResult(result.Error),
             ErroCodeEnum.Forbidden => new ObjectResult(result.Error) { StatusCode = 403 },
             ErroCodeEnum.NotFound => new NotFoundObjectResult(result.Error),
-            ErroCodeEnum.InternalServerError => new ObjectResult(new { code = 500, message = "Something went wrong." }) { StatusCode = 500 },
-            _ => new ObjectResult(new { code = 500, message = "Something went wrong." }) { StatusCode = 500 }
+            ErroCodeEnum.InternalServerError => new ObjectResult(new { status = 500, message = "Something went wrong." }) { StatusCode = 500 },
+            _ => new ObjectResult(new { status = 500, message = "Something went wrong." }) { StatusCode = 500 }
         };
     }
 }

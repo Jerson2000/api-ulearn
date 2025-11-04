@@ -28,34 +28,16 @@ public class UserRepository(ULearnDbContext dbContext, ICacheService cacheServic
 
     public async Task<IReadOnlyList<User>> GetAllAsync()
     {
-        var cacheKey = CacheHelper.GenerateCacheKey<User>("all");
-        var cacheDuration = TimeSpan.FromMinutes(1);
-        return await _cacheService.GetOrSetAsync<List<User>?>(
-            cacheKey,
-            async () => await _dbContext.Users.AsNoTracking().ToListAsync(),
-            cacheDuration
-        ) ?? new();
+        return await _dbContext.Users.AsNoTracking().ToListAsync();
     }
 
     public async Task<User?> GetByEmailAsync(string email)
     {
-        var cacheKey = CacheHelper.GenerateCacheKey<User>($"email:{email}");
-        var cacheDuration = TimeSpan.FromMinutes(1);
-        return await _cacheService.GetOrSetAsync(
-            cacheKey,
-            async () => await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email),
-            cacheDuration
-        );
+        return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Email == email);
     }
     public async Task<User?> GetByIdAsync(Guid id)
     {
-        var cacheKey = CacheHelper.GenerateCacheKey<User>($"id:{id}");
-        var cacheDuration = TimeSpan.FromMinutes(1);
-        return await _cacheService.GetOrSetAsync(
-            cacheKey,
-            async () => await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id),
-            cacheDuration
-        );
+        return await _dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
     }
     public async Task UpdateAsync(User user)
     {

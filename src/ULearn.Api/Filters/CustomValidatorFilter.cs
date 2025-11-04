@@ -9,24 +9,6 @@ namespace ULearn.Api.Filters;
 
 public class CustomValidationFilter : IAsyncActionFilter
 {
-    // public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
-    // {
-    //     foreach (var argument in context.ActionArguments.Values)
-    //     {
-    //         if (argument is not IValidateRequest) continue;
-
-    //         var validationResult = await ValidateAsync(argument, context.HttpContext.RequestServices);
-
-    //         if (!validationResult.IsValid)
-    //         {
-    //             context.Result = CreateValidationProblemResult(validationResult);
-    //             return;
-    //         }
-    //     }
-
-    //     await next();
-    // }
-
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         // Check for ModelState validation errors first

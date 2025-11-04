@@ -7,6 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using ULearn.Application.Interfaces;
+using ULearn.Application.Services;
+using ULearn.Domain.Enums;
+using ULearn.Domain.Interfaces.Services;
 using ULearn.Domain.Shared;
 using ULearn.Infrastructure.Settings;
 
@@ -38,20 +42,24 @@ public static class JwtConfig
                 ValidAudience = settings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key!)),
                 RequireSignedTokens = true,
-                RoleClaimType = ClaimTypes.Role
+                RoleClaimType = ClaimTypes.Role,
+                ClockSkew = TimeSpan.Zero
             };
 
             options.Events = new JwtBearerEvents
             {
-                OnChallenge = context =>
+                OnChallenge = async context =>
                 {
                     context.HandleResponse();
-                    context.Response.StatusCode = 401;
-                    return context.Response.WriteAsJsonAsync(new { code = 401, message = "Unauthorized." });
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    await context.Response.WriteAsJsonAsync(new Error(
+                        ErroCodeEnum.Unauthorized,
+                        "Unauthorized"
+                    ));
                 },
                 OnForbidden = context =>
                 {
-                    return context.Response.WriteAsJsonAsync(new { code = 403, message = "Forbidden." });
+                    return context.Response.WriteAsJsonAsync(new Error(ErroCodeEnum.Forbidden, "Forbidden"));
                 },
                 OnTokenValidated = ctx =>
                 {

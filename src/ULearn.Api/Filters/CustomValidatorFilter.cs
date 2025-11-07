@@ -20,14 +20,7 @@ public class CustomValidationFilter : IAsyncActionFilter
                     kvp => kvp.Key,
                     kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
                 );
-
-            var problemDetails = new ValidationProblemDetails(errors)
-            {
-                Title = "One or more validation errors occurred.",
-                Status = (int)HttpStatusCode.BadRequest
-            };
-
-            context.Result = new BadRequestObjectResult(new { Message = "One or more validation errors occurred.", Status = 400, Errors = errors });
+            context.Result = new BadRequestObjectResult(new { Message = "One or more validation errors occurred.", Code = 400, Errors = errors });
             return;
         }
 
@@ -70,14 +63,6 @@ public class CustomValidationFilter : IAsyncActionFilter
                 g => g.Key,
                 g => g.Select(e => e.ErrorMessage).ToArray()
             );
-
-        var problemDetails = new ValidationProblemDetails(errors)
-        {
-            Title = "One or more validation errors occurred.",
-            Status = (int)HttpStatusCode.BadRequest,
-        };
-
-
-        return new BadRequestObjectResult(problemDetails);
+        return new BadRequestObjectResult(new { Message = "One or more validation errors occurred.", Code = 400, Errors = errors });
     }
 }

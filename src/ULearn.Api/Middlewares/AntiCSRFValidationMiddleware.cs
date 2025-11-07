@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Antiforgery;
+using ULearn.Domain.Shared;
 
 namespace ULearn.Api.Middlewares
 {
@@ -32,11 +33,7 @@ namespace ULearn.Api.Middlewares
                 catch (AntiforgeryValidationException)
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    await context.Response.WriteAsJsonAsync(new
-                    {
-                        Message = "Invalid Token",
-                        Status = 400
-                    });
+                    await context.Response.WriteAsJsonAsync(new Error(Domain.Enums.ErroCodeEnum.BadRequest, "Invalid token."));
                     return;
                 }
             }

@@ -10,14 +10,11 @@ namespace ULearn.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(IUserService userService, IDistributedCache distributedCache, IMemoryCache memoryCache) : ControllerBase
+public class UsersController(IUserService userService) : ControllerBase
 {
     private readonly IUserService _userService = userService;
-    private readonly IDistributedCache _distributedCache = distributedCache;
-    private readonly IMemoryCache _memoryCache = memoryCache;
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<IActionResult> GetAll()
     {
         var users = await _userService.GetAllAsync();
@@ -26,7 +23,6 @@ public class UsersController(IUserService userService, IDistributedCache distrib
 
 
     [HttpGet("{id:guid}")]
-    [AllowAnonymous]
     public async Task<IActionResult> GetUserById([FromRoute] Guid id)
     {
         var user = await _userService.GetByIdAsync(id);
@@ -48,6 +44,7 @@ public class UsersController(IUserService userService, IDistributedCache distrib
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Policy = "Admin")]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         var user = await _userService.DeleteAsync(id);

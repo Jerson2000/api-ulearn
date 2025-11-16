@@ -1,11 +1,11 @@
 
 
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Math.EC.Rfc7748;
 using ULearn.Domain.Entities;
-using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Repositories;
+using ULearn.Infrastructure.Data;
 
-namespace ULearn.Infrastructure.Data.Repositories;
+namespace ULearn.Infrastructure.Repositories;
 
 
 public class TokenRepository(ULearnDbContext dbContext) : ITokenRepository

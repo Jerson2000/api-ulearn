@@ -3,7 +3,7 @@ using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
 using ULearn.Domain.Entities;
 using ULearn.Domain.Enums;
-using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Repositories;
 using ULearn.Domain.Interfaces.Services;
 using ULearn.Domain.Shared;
 using BBCrypt = BCrypt.Net.BCrypt;

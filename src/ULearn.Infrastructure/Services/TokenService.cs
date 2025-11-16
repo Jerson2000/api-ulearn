@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ULearn.Domain.Entities;
-using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Repositories;
 using ULearn.Domain.Interfaces.Services;
 using ULearn.Infrastructure.Settings;
 

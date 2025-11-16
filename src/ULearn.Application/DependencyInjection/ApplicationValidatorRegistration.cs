@@ -21,6 +21,8 @@ public static class ApplicationValidatorRegistration
         services.AddScoped<IValidator<UploadFileRequestDto>, UploadFileRequestDtoValidator>();
         services.AddScoped<IValidator<UploadFilesRequestDto>, UploadFilesRequestDtoValidator>();
         services.AddScoped<IValidator<IFormFile>, IFormFileValidator>();
+        
+        services.AddCourseValidator(config);
 
         return services;
     }

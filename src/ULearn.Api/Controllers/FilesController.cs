@@ -1,12 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using ULearn.Api.Extensions;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
@@ -15,7 +8,7 @@ namespace ULearn.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FilesController : ControllerBase
+    public class FilesController : BaseController
     {
         private readonly ILogger<FilesController> _logger;
         private readonly IStorageAppService _storageAppService;

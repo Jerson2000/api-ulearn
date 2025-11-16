@@ -15,7 +15,7 @@ namespace ULearn.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AuthController(IAuthService authService, IAntiforgery antiforgery) : ControllerBase
+public class AuthController(IAuthService authService, IAntiforgery antiforgery) : BaseController
 {
     private readonly IAntiforgery _antiforgery = antiforgery;
 
@@ -86,12 +86,4 @@ public class AuthController(IAuthService authService, IAntiforgery antiforgery) 
         Response.Headers.Append("X-CSRF-TOKEN", tokens.RequestToken!);
         return Ok(new { Token = tokens.RequestToken!.ToString() });
     }
-
-    [HttpPost("sample-request")]
-    [AllowAnonymous]
-    public IActionResult DoSomething()
-    {
-        return Ok();
-    }
-
 }

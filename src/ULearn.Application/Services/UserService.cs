@@ -1,10 +1,8 @@
-using System.Net;
 using ULearn.Application.DTOs;
-using ULearn.Application.DTOs.Mappers;
 using ULearn.Application.Interfaces;
-using ULearn.Domain.Entities;
+using ULearn.Application.Mappers;
 using ULearn.Domain.Enums;
-using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Repositories;
 using ULearn.Domain.Interfaces.Services;
 using ULearn.Domain.Shared;
 

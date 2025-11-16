@@ -1,12 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Memory;
 using ULearn.Domain.Entities;
-using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Repositories;
 using ULearn.Domain.Interfaces.Services;
-using ULearn.Infrastructure.Utils;
+using ULearn.Infrastructure.Data;
 
-namespace ULearn.Infrastructure.Data.Repositories;
+namespace ULearn.Infrastructure.Repositories;
 
 public class UserRepository(ULearnDbContext dbContext, ICacheService cacheService) : IUserRepository
 {

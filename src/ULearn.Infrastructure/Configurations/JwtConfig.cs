@@ -74,10 +74,11 @@ public static class JwtConfig
             };
         });
         services.AddAuthorizationBuilder()
-            .AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"))
-            .SetFallbackPolicy(new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build());
+       .AddPolicy("Admin", policy => policy.RequireRole(UserRole.Admin.ToString()))
+       .AddPolicy("Instructor", policy => policy.RequireRole(UserRole.Instructor.ToString()))
+       .SetFallbackPolicy(new AuthorizationPolicyBuilder()
+           .RequireAuthenticatedUser()
+           .Build());
 
         return services;
     }

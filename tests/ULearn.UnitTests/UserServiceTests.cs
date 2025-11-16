@@ -3,7 +3,7 @@ using Moq;
 using ULearn.Application.DTOs;
 using ULearn.Application.Services;
 using ULearn.Domain.Entities;
-using ULearn.Domain.Interfaces.Repository;
+using ULearn.Domain.Interfaces.Repositories;
 using ULearn.Domain.Interfaces.Services;
 
 namespace ULearn.UnitTests

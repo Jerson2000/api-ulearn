@@ -1,8 +1,7 @@
-
-
+using ULearn.Application.DTOs;
 using ULearn.Domain.Entities;
 
-namespace ULearn.Application.DTOs.Mappers;
+namespace ULearn.Application.Mappers;
 
 public static class UserMapper
 {

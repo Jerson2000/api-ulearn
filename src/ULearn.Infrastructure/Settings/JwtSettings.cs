@@ -9,5 +9,5 @@ public class JwtSettings
     public string? Key { get; set; } = EnvironmentValues.JWT_KEY;
     public string? Issuer { get; set; } = "ULearn";
     public string? Audience { get; set; } = "ULearnClient";
-    public int AccessTokenExpiryMinutes { get; set; } = 1;
+    public int AccessTokenExpiryMinutes { get; set; } = 30;
 }

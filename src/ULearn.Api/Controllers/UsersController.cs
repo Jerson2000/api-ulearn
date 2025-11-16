@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Distributed;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
-using Microsoft.Extensions.Caching.Memory;
 using ULearn.Api.Extensions;
 
 namespace ULearn.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class UsersController(IUserService userService) : ControllerBase
+public class UsersController(IUserService userService) : BaseController
 {
     private readonly IUserService _userService = userService;
 

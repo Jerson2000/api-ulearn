@@ -9,11 +9,17 @@ public static class ApplicationServiceRegistration
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
+        #region Services
+
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IStorageAppService, StorageService>();
+        services.AddScoped<ICourseService,CourseService>();
+        services.AddScoped<ICategoryService,CategoryService>();
+        services.AddScoped<IModuleService,ModuleService>();
+        services.AddScoped<ILessonService,LessonService>();
+        #endregion
 
-        // Validator
         services.AddValidatorsRegistration(config);
         return services;
     }

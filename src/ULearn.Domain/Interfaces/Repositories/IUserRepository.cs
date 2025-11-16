@@ -1,6 +1,6 @@
 using ULearn.Domain.Entities;
 
-namespace ULearn.Domain.Interfaces.Repository;
+namespace ULearn.Domain.Interfaces.Repositories;
 
 public interface IUserRepository
 {

@@ -36,9 +36,12 @@ public class Result
 
     public static Result<TValue> Failure<TValue>(Error error) => new(default, false, error);
     public static Result<TValue> Failure<TValue>(ErroCodeEnum code,string message) => new(default, false, new Error(code,message));
+    public static Result<TValue> FailureBadRequest<TValue>(string message) => new(default, false, new Error(ErroCodeEnum.BadRequest,message));
     public static Result<TValue> FailureUnauthorized<TValue>() => new(default, false, new Error(ErroCodeEnum.Unauthorized,"Unauthorized."));
-    public static Result<TValue> FailureForbidden<TValue>() => new(default, false, new Error(ErroCodeEnum.Unauthorized,"Forbidden."));
-    public static Result<TValue> FailureNotFound<TValue>(string message) => new(default, false, new Error(ErroCodeEnum.Unauthorized,message));
+    public static Result<TValue> FailureUnauthorized<TValue>(string message) => new(default, false, new Error(ErroCodeEnum.Unauthorized,message));
+    public static Result<TValue> FailureForbidden<TValue>() => new(default, false, new Error(ErroCodeEnum.Forbidden,"Forbidden."));
+    public static Result<TValue> FailureForbidden<TValue>(string message) => new(default, false, new Error(ErroCodeEnum.Forbidden,message));
+    public static Result<TValue> FailureNotFound<TValue>(string message) => new(default, false, new Error(ErroCodeEnum.NotFound,message));
 
     public static Result<TValue> Create<TValue>(TValue? value) => value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
 }

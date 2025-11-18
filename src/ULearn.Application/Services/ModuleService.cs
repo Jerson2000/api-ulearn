@@ -10,9 +10,11 @@ namespace ULearn.Application.Services;
 public class ModuleService : IModuleService
 {
     private readonly IUnitOfWork _unitOfWork;
-    public ModuleService(IUnitOfWork unitOfWork)
+    private readonly IParallelUnitOfWork _parallelUnitOfWork;
+    public ModuleService(IUnitOfWork unitOfWork, IParallelUnitOfWork parallelUnitOfWork)
     {
         _unitOfWork = unitOfWork;
+        _parallelUnitOfWork = parallelUnitOfWork;
     }
 
     public async Task<Result<Guid>> AddModuleAsync(Guid courseId, CreateModuleRequestDto dto, Guid instructorId)
@@ -42,31 +44,32 @@ public class ModuleService : IModuleService
         if (module != null)
         {
             var isUserEnrolled = await _unitOfWork.Enrollments.IsEnrolledAsync(userId, module.CourseId);
-            if (module.Course.InstructorId != userId || !isUserEnrolled)
+            if (module.Course?.InstructorId != userId && !isUserEnrolled)
                 return Result.FailureForbidden<ModuleDto?>();
         }
 
         return Result.Success(module?.ToModuleDto());
     }
 
-    public async Task<Result<List<ModuleDto>?>> GetModulesByCourseOrderedAsync(Guid courseId, Guid userId)
+    public async Task<Result<List<ModuleDto>>> GetModulesByCourseOrderedAsync(Guid courseId, Guid userId)
     {
-        var courseTask = _unitOfWork.Courses.GetWithDetailsAsync(courseId);
-        var enrolledTask = _unitOfWork.Enrollments.IsEnrolledAsync(userId, courseId);
 
-        await Task.WhenAll(courseTask, enrolledTask);
-
-        var (course, isUserEnrolled) = (await courseTask, await enrolledTask);
+        var (course, isUserEnrolled) =
+            await _parallelUnitOfWork.ParallelQueryAsync(
+                u => u.Courses.GetWithDetailsAsync(courseId),
+                u => u.Enrollments.IsEnrolledAsync(userId, courseId)
+            );
 
         if (course is null)
-            return Result.FailureNotFound<List<ModuleDto>?>("Course not found.");
+            return Result.FailureNotFound<List<ModuleDto>>("Course not found.");
 
 
-        if (course.InstructorId != userId || !isUserEnrolled)
-            return Result.FailureForbidden<List<ModuleDto>?>();
+        if (course.InstructorId != userId && !isUserEnrolled)
+            return Result.FailureForbidden<List<ModuleDto>>();
+
 
         var modules = await _unitOfWork.Modules.GetModulesByCourseOrderedAsync(courseId);
 
-        return Result.Success(modules?.ToModuleDtoList());
+        return Result.Success(modules.ToModuleDtoList());
     }
 }

@@ -10,7 +10,7 @@ public static class ModuleMapper
 {
     public static ModuleDto ToModuleDto(this Module module)
     {
-        return new ModuleDto(module.Id,module.Title,module.Description,module.OrderIndex,module.Course.ToCourseDto(),module.Lessons.ToList().ToLessonDtoList());
+        return new ModuleDto(module.Id,module.Title,module.Description,module.OrderIndex,module.Course?.ToCourseDto(),module.Lessons.ToList().ToLessonDtoList());
     }
 
     public static List<ModuleDto> ToModuleDtoList(this List<Module> list)

@@ -19,7 +19,7 @@ public class TokenRepository(ULearnDbContext dbContext) : ITokenRepository
 
     public async Task<Token?> GetTokenByIdAsync(Guid id)
     {
-        return await _dbContext.Tokens.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Tokens.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Token?> GetTokenByUserAsync(Guid userId)

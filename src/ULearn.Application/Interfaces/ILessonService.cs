@@ -8,7 +8,7 @@ namespace ULearn.Application.Interfaces;
 
 public interface ILessonService
 {
-    Task<Result<List<LessonDto>>> GetLessonsByModuleOrderedAsync(Guid moduleId);
+    Task<Result<List<LessonDto>>> GetLessonsByModuleOrderedAsync(Guid courseId,Guid moduleId,Guid userId);
     Task<Result<LessonDto?>> GetLessonWithContentAsync(Guid lessonId);
     Task<Result<Guid>> AddLessonAsync(Guid moduleId, CreateLessonRequestDto dto, Guid instructorId);
 }

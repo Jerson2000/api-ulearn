@@ -8,7 +8,7 @@ public class Lesson
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid ModuleId { get; set; }
-    public Module Module { get; set; } = null!;
+    public Module? Module { get; set; }
     public string Title { get; set; } = string.Empty;
     public string ContentUrl { get; set; } = string.Empty;
     public string ContentText { get; set; } = string.Empty;

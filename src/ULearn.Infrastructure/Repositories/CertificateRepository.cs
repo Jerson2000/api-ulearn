@@ -16,6 +16,7 @@ public class CertificateRepository : ICertificateRepository
     public async Task<Certificate?> IssueAsync(Guid userId, Guid courseId, string pdfUrl)
     {
         var existing = await _db.Certificates
+            .AsNoTracking()
             .FirstOrDefaultAsync(c => c.UserId == userId && c.CourseId == courseId);
 
         if (existing != null) return existing;

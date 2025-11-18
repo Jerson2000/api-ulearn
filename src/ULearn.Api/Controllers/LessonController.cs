@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using ULearn.Api.Extensions;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
+using ULearn.Domain.Entities;
 
 namespace ULearn.Api.Controllers;
 
@@ -22,19 +23,19 @@ public class LessonsController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetLessons([FromRoute] Guid courseId, [FromRoute] Guid moduleId)
     {
-        throw new NotImplementedException();
+        return await _lessonService.GetLessonsByModuleOrderedAsync(courseId,moduleId,UserId).ToActionResult();
     }
 
     [HttpGet("{lessonId}")]
     public async Task<IActionResult> GetLesson([FromRoute] Guid courseId, [FromRoute] Guid moduleId, [FromRoute] Guid lessonId)
     {
-        throw new NotImplementedException();
+        return await _lessonService.GetLessonWithContentAsync(lessonId).ToActionResult();
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateLesson([FromRoute] Guid courseId, [FromRoute] Guid moduleId, CreateLessonRequestDto dto)
+    public async Task<IActionResult> CreateLesson([FromRoute] Guid courseId, [FromRoute] Guid moduleId, [FromBody]CreateLessonRequestDto dto)
     {
-        throw new NotImplementedException();
+        return await _lessonService.AddLessonAsync(moduleId,dto,UserId).ToActionResult();
     }
     [HttpPut("{lessonId}")]
     public async Task<IActionResult> UpdateLesson([FromRoute] Guid courseId, [FromRoute] Guid moduleId, [FromRoute] Guid lessonId, CreateLessonRequestDto dto)

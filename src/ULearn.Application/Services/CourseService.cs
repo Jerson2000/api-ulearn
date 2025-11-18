@@ -47,8 +47,12 @@ public class CourseService : ICourseService
     {
         if (instructorId == Guid.Empty)
         {
-            return Result.FailureUnauthorized<Guid>();
+            return Result.FailureForbidden<Guid>();
         }
+
+        var cat = await _uow.Repository<Category>().GetByIdAsync(request.CategoryId);
+        if (cat == null)
+            return Result.FailureNotFound<Guid>("The selected category was not found. Please choose a valid category.");
 
 
         var course = new Course
@@ -85,31 +89,4 @@ public class CourseService : ICourseService
 
     public async Task<bool> IsEnrolledAsync(Guid userId, Guid courseId)
         => await _uow.Enrollments.IsEnrolledAsync(userId, courseId);
-
-  
-    public async Task<Result<Guid>> AddLessonAsync(Guid moduleId, CreateLessonRequestDto dto, Guid instructorId)
-    {
-        var module = await _uow.Repository<Module>().GetByIdAsync(moduleId);
-        if (module?.Course?.InstructorId != instructorId)
-            return Result.FailureUnauthorized<Guid>();
-
-        var lesson = new Lesson
-        {
-            ModuleId = moduleId,
-            Title = dto.Title,
-            ContentType = dto.ContentType,
-            ContentUrl = dto.ContentUrl ?? string.Empty,
-            ContentText = dto.ContentText ?? string.Empty,
-            DurationMinutes = dto.DurationMinutes ?? 0,
-            OrderIndex = dto.OrderIndex,
-            IsPreview = dto.IsPreview
-        };
-
-        await _uow.Repository<Lesson>().AddAsync(lesson);
-        await _uow.SaveChangesAsync();
-
-        return Result.Success(lesson.Id);
-    }
-
-
 }

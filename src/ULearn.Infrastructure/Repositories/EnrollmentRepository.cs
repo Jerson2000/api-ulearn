@@ -14,10 +14,11 @@ public class EnrollmentRepository : IEnrollmentRepository
     public EnrollmentRepository(ULearnDbContext db) => _db = db;
 
     public async Task<bool> IsEnrolledAsync(Guid userId, Guid courseId) =>
-        await _db.Enrollments.AnyAsync(e => e.UserId == userId && e.CourseId == courseId);
+        await _db.Enrollments.AsNoTracking().AnyAsync(e => e.UserId == userId && e.CourseId == courseId);
 
     public async Task<Enrollment?> GetProgressAsync(Guid userId, Guid courseId) =>
         await _db.Enrollments
+            .AsNoTracking()
             .Include(e => e.Course).ThenInclude(c => c.Modules).ThenInclude(m => m.Lessons)
             .FirstOrDefaultAsync(e => e.UserId == userId && e.CourseId == courseId);
 
@@ -38,7 +39,7 @@ public class EnrollmentRepository : IEnrollmentRepository
 
     public async Task CompleteCourseAsync(Guid userId, Guid courseId)
     {
-        var enrollment = await _db.Enrollments.FirstOrDefaultAsync(e => e.UserId == userId && e.CourseId == courseId);
+        var enrollment = await _db.Enrollments.AsNoTracking().FirstOrDefaultAsync(e => e.UserId == userId && e.CourseId == courseId);
         if (enrollment != null)
         {
             enrollment.EnrollmentStatus = EnrollmentStatusEnum.Completed;

@@ -15,7 +15,7 @@ public class Course
     public double DurationHours { get; set; }
     public CourseLevelEnum CourseLevel { get; set; }
     public Guid InstructorId { get; set; }
-    public User Instructor { get; set; } = null!;
+    public User? Instructor { get; set; }
     public Guid? CategoryId { get; set; }
     public Category? Category { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -14,8 +14,7 @@ public class AssignmentRepository : IAssignmentRepository
 
     public async Task<AssignmentSubmission?> SubmitAsync(Guid assignmentId,Guid userId, string fileUrl, string? text)
     {
-        var existing = await _db.AssignmentSubmissions
-            .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.UserId == userId);
+        var existing = await _db.AssignmentSubmissions.AsNoTracking().FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.UserId == userId);
 
         if (existing != null) return existing;
 

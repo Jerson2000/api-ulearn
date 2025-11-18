@@ -8,7 +8,7 @@ public class Quiz
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid LessonId { get; set; }
-    public Lesson Lesson { get; set; } = null!;
+    public Lesson? Lesson { get; set; }
     public string Title { get; set; } = string.Empty;
     public int PassingScore { get; set; }
     public int TimeLimitMinutes { get; set; }

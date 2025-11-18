@@ -9,9 +9,9 @@ public class AssignmentSubmission
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid AssignmentId { get; set; }
-    public Assignment Assignment { get; set; } = null!;
+    public Assignment? Assignment { get; set; }
     public Guid UserId { get; set; }
-    public User User { get; set; } = null!;
+    public User? User { get; set; }
     public string FileUrl { get; set; } = string.Empty;
     public string TextSubmission { get; set; } = string.Empty;
     public DateTime SubmittedAt { get; set; }

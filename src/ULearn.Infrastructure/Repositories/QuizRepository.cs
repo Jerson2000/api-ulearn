@@ -38,7 +38,7 @@ public class QuizRepository : IQuizRepository
 
     public async Task<QuizAttempt?> SubmitAttemptAsync(Guid attemptId, List<QuizAnswer> answers)
     {
-        var attempt = await _db.QuizAttempts.Include(a => a.Answers).FirstOrDefaultAsync(a => a.Id == attemptId);
+        var attempt = await _db.QuizAttempts.AsNoTracking().Include(a => a.Answers).FirstOrDefaultAsync(a => a.Id == attemptId);
 
         if (attempt == null) return null;
 

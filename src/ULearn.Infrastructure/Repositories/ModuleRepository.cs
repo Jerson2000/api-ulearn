@@ -15,9 +15,9 @@ public class ModuleRepository : IModuleRepository
 
     public async Task<List<Module>> GetModulesByCourseOrderedAsync(Guid courseId) =>
         await _db.Modules
+            .AsNoTracking()
             .Where(m => m.CourseId == courseId)
             .OrderBy(m => m.OrderIndex)
-            .AsNoTracking()
             .ToListAsync();
 
     public async Task<Module?> GetModuleAsync(Guid moduleId, bool includeCourse = false, bool includeLessons = false)

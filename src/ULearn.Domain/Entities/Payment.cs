@@ -9,9 +9,9 @@ public class Payment
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid UserId { get; set; }
-    public User User { get; set; } = null!; 
+    public User? User { get; set; }  
     public Guid CourseId { get; set; }
-    public Course Course { get; set; } = null!;
+    public Course? Course { get; set; }
     public double Amount { get; set; }
     public PaymentStatusEnum PaymentStatus { get; set; }
     public string PaymentGateway { get; set; } = string.Empty;

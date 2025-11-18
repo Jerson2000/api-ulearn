@@ -8,7 +8,7 @@ public class QuizQuestion
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public Guid QuizId { get; set; }
-    public Quiz Quiz { get; set; } = null!;
+    public Quiz? Quiz { get; set; }
     public string QuestionText { get; set; } = string.Empty;
     public QuizQuestionTypeEnum QuestionType { get; set; }
     public int Points { get; set; }

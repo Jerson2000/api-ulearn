@@ -58,6 +58,7 @@ public static class InfrastructureServiceRegistration
         services.AddKeyedTransient<IStorageService, ImagekitStorageService>("imagekitStorage");
         // unit of work
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IParallelUnitOfWork, UnitOfWork>();
 
         #endregion
 

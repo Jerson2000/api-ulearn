@@ -15,15 +15,17 @@ public class CourseRepository(ULearnDbContext db) : ICourseRepository
 
     public async Task<Course?> GetWithDetailsAsync(Guid courseId) =>
           await _db.Courses
-              .Include(c => c.Instructor)
-              .Include(c => c.Category)
-              .Include(c => c.Modules).ThenInclude(m => m.Lessons)
-              .Include(c => c.Enrollments)
-              .FirstOrDefaultAsync(c => c.Id == courseId);
+            .AsNoTracking()
+            .Include(c => c.Instructor)
+            .Include(c => c.Category)
+            .Include(c => c.Modules).ThenInclude(m => m.Lessons)
+            .Include(c => c.Enrollments)
+            .FirstOrDefaultAsync(c => c.Id == courseId);
 
     public async Task<PagedResult<Course>> GetPublishedAsync(int page, int pageSize, string? search = null)
     {
         var q = _db.Courses
+        .AsNoTracking()
         .Include(c => c.Instructor)
         .Include(c => c.Category)
         .Include(c => c.Enrollments)

@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Ocsp;
 using ULearn.Api.Extensions;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
@@ -36,6 +37,13 @@ public class CoursesController : BaseController
     public async Task<IActionResult> Create([FromBody] CreateCourseRequestDto request)
     {
         return await _courseService.CreateAsync(request, UserId).ToActionResult();
+    }
+
+    [HttpPut("{courseId}")]
+    [Authorize(Roles ="Instructor, Admin")]
+    public async Task<IActionResult> Update([FromRoute] Guid courseId,[FromBody] CreateCourseRequestDto request)
+    {
+        return await _courseService.UpdateAsync(courseId,request,UserId).ToActionResult();
     }
 
     [HttpPost("enroll/{courseId}")]

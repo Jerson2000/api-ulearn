@@ -38,6 +38,32 @@ public class ModuleService : IModuleService
         return Result.Success(module.Id);
     }
 
+    public async Task<Result> UpdateModuleAsync(Guid moduleId, CreateModuleRequestDto dto, Guid instructorId)
+    {
+        if (moduleId == Guid.Empty)
+            return Result.FailureBadRequest<Result>("Module ID cannot be empty.");
+
+        if (instructorId == Guid.Empty)
+            return Result.FailureForbidden<Result>("Authentication required.");
+
+        var module = await _unitOfWork.Modules.GetModuleAsync(moduleId, true);
+
+        if (module == null)
+            return Result.FailureNotFound<Result>("Module not found.");
+
+        if (module.Course?.InstructorId != instructorId)
+            return Result.FailureForbidden<Result>("You are not authorized to update this module.");
+
+        module.Title = dto.Title?.Trim() ?? module.Title;
+        module.Description = dto.Description?.Trim() ?? module.Description;
+        module.OrderIndex = dto.OrderIndex;
+        
+        _unitOfWork.Repository<Module>().Update(module);
+        await _unitOfWork.SaveChangesAsync();
+
+        return Result.Success();
+    }
+
     public async Task<Result<ModuleDto?>> GetModuleAsync(Guid moduleId, Guid userId)
     {
         var module = await _unitOfWork.Modules.GetModuleAsync(moduleId, true);

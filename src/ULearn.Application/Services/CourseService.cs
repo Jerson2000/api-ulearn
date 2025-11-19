@@ -1,5 +1,6 @@
 
 
+using System.Reflection;
 using ULearn.Application.DTOs;
 using ULearn.Application.Interfaces;
 using ULearn.Application.Mappers;
@@ -72,6 +73,43 @@ public class CourseService : ICourseService
         await _uow.SaveChangesAsync();
 
         return Result.Success(course.Id);
+    }
+    
+    public async Task<Result> UpdateAsync(Guid courseId, CreateCourseRequestDto dto,Guid instructorId)
+    {
+        if (courseId == Guid.Empty)
+            return Result.FailureBadRequest<Result>("Course ID cannot be empty.");
+
+        if (instructorId == Guid.Empty)
+            return Result.FailureForbidden<Result>("Instructor authentication required.");
+
+        var course = await _uow.Repository<Course>().GetByIdAsync(courseId);
+        if (course == null)
+            return Result.FailureNotFound<Result>("Course not found.");
+
+        if (course.InstructorId != instructorId)
+            return Result.FailureForbidden<Result>("You are not authorized to update this course.");
+
+
+        if (course.CategoryId != dto.CategoryId)
+        {
+            var category = await _uow.Repository<Category>().GetByIdAsync(dto.CategoryId);
+            if (category == null)
+                return Result.FailureNotFound<Result>("The selected category was not found. Please choose a valid category.");
+        }
+
+
+        course.Title = dto.Title;
+        course.Description = dto.Description ?? string.Empty;
+        course.Price = dto.Price;
+        course.CategoryId = dto.CategoryId;
+        course.UpdatedAt = DateTime.UtcNow;
+
+        var genericRepo = _uow.Repository<Course>();
+        genericRepo.Update(course);
+        await _uow.SaveChangesAsync();
+
+        return Result.Success();
     }
 
     public async Task<Result> EnrollAsync(Guid userId, Guid courseId)

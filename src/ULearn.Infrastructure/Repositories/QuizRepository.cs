@@ -70,13 +70,13 @@ public class QuizRepository : IQuizRepository
             .Include(a => a.SelectedOption)
             .ToListAsync();
 
-        var totalPoints = answers.Sum(a => a.Question.Points);
+        var totalPoints = answers.Sum(a => a.Question!.Points);
         var earnedPoints = 0;
 
         foreach (var ans in answers)
         {
-            if (ans.Question.QuestionType == QuizQuestionTypeEnum.MultipleChoice ||
-                ans.Question.QuestionType == QuizQuestionTypeEnum.TrueOrFalse)
+            if (ans.Question!.QuestionType == QuizQuestionTypeEnum.MultipleChoice ||
+                ans.Question!.QuestionType == QuizQuestionTypeEnum.TrueOrFalse)
             {
                 if (ans.SelectedOption?.IsCorrect == true)
                     earnedPoints += ans.Question.Points;

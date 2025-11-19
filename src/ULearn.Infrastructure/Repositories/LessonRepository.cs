@@ -32,4 +32,7 @@ public class LessonRepository : ILessonRepository
                 .Include(l => l.Quiz)
                 .Include(l => l.Assignment)
                 .FirstOrDefaultAsync(l => l.Id == lessonId);
+
+    public async Task<Lesson?> GetLessonWithModuleAsync(Guid lessonId) =>
+        await _db.Lessons.AsNoTracking().Include(x=>x.Module).ThenInclude(m => m!.Course).FirstOrDefaultAsync(x =>x.Id == lessonId);
 }

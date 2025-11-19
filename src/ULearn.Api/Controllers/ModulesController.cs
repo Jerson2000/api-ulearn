@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ULearn.Api.Extensions;
 using ULearn.Application.DTOs;
@@ -29,15 +30,17 @@ public class ModulesController : BaseController
     }
 
     [HttpPost]
+    [Authorize(Roles ="Instructor, Admin")]
     public async Task<IActionResult> CreateModule([FromRoute] Guid courseId,[FromBody] CreateModuleRequestDto dto)
     {
         return await _moduleService.AddModuleAsync(courseId,dto,UserId).ToActionResult();
     }
 
     [HttpPut("{moduleId}")]
+    [Authorize(Roles ="Instructor, Admin")]
     public async Task<IActionResult> UpdateModule([FromRoute] Guid courseId, [FromRoute] Guid moduleId, CreateModuleRequestDto dto)
     {
-        throw new NotImplementedException();
+        return await _moduleService.UpdateModuleAsync(moduleId,dto,UserId).ToActionResult();
     }
 
     [HttpDelete("{moduleId}")]

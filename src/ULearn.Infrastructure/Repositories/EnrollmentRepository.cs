@@ -19,7 +19,7 @@ public class EnrollmentRepository : IEnrollmentRepository
     public async Task<Enrollment?> GetProgressAsync(Guid userId, Guid courseId) =>
         await _db.Enrollments
             .AsNoTracking()
-            .Include(e => e.Course).ThenInclude(c => c.Modules).ThenInclude(m => m.Lessons)
+            .Include(e => e.Course).ThenInclude(c => c!.Modules).ThenInclude(m => m.Lessons)
             .FirstOrDefaultAsync(e => e.UserId == userId && e.CourseId == courseId);
 
     public async Task EnrollAsync(Guid userId, Guid courseId)

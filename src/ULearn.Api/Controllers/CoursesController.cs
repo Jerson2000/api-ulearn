@@ -21,34 +21,34 @@ public class CoursesController : BaseController
     }
 
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null)
+    public async Task<IActionResult> GetPublishedAsync([FromQuery] int page = 1, [FromQuery] int pageSize = 10, [FromQuery] string? search = null)
     {
         return await _courseService.GetPublishedAsync(page, pageSize, search).ToActionResult();
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(Guid id)
+    public async Task<IActionResult> GetAsync(Guid id)
     {
         return await _courseService.GetAsync(id).ToActionResult();
     }
 
     [HttpPost]
     [Authorize(Roles = "Instructor, Admin")]
-    public async Task<IActionResult> Create([FromBody] CreateCourseRequestDto request)
+    public async Task<IActionResult> CreateAsync([FromBody] CreateCourseRequestDto request)
     {
         return await _courseService.CreateAsync(request, UserId).ToActionResult();
     }
 
     [HttpPut("{courseId}")]
     [Authorize(Roles ="Instructor, Admin")]
-    public async Task<IActionResult> Update([FromRoute] Guid courseId,[FromBody] CreateCourseRequestDto request)
+    public async Task<IActionResult> UpdateAsync([FromRoute] Guid courseId,[FromBody] CreateCourseRequestDto request)
     {
         return await _courseService.UpdateAsync(courseId,request,UserId).ToActionResult();
     }
 
     [HttpPost("enroll/{courseId}")]
     [Authorize(Roles = "User")]
-    public async Task<IActionResult> Enroll(Guid courseId)
+    public async Task<IActionResult> EnrollAsync(Guid courseId)
     {
         return await _courseService.EnrollAsync(UserId, courseId).ToActionResult();
     }

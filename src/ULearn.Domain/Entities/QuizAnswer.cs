@@ -10,7 +10,7 @@ public class QuizAnswer
     public QuizAttempt? Attempt { get; set; }
     public Guid QuestionId { get; set; }
     public QuizQuestion? Question { get; set; }
-    public Guid? SelectedOptionId { get; set; }
+    public Guid SelectedOptionId { get; set; }
     public QuizOption? SelectedOption { get; set; }
     public string TextAnswer { get; set; } = string.Empty;
 }

@@ -1,7 +1,5 @@
 
 
-using System.ComponentModel;
-
 namespace ULearn.Domain.Entities;
 
 public class Quiz
@@ -12,7 +10,7 @@ public class Quiz
     public string Title { get; set; } = string.Empty;
     public int PassingScore { get; set; }
     public int TimeLimitMinutes { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<QuizQuestion> Questions { get; set; } = new List<QuizQuestion>();
     public ICollection<QuizAttempt> Attempts { get; set; } = new List<QuizAttempt>();

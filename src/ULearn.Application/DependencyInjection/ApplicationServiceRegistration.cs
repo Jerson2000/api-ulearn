@@ -18,6 +18,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<ICategoryService,CategoryService>();
         services.AddScoped<IModuleService,ModuleService>();
         services.AddScoped<ILessonService,LessonService>();
+        services.AddScoped<IQuizService,QuizService>();
         #endregion
 
         services.AddValidatorsRegistration(config);

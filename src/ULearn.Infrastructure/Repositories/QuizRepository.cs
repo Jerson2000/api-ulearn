@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ULearn.Domain.Entities;
 using ULearn.Domain.Enums;
 using ULearn.Domain.Interfaces.Repositories;
+using ULearn.Domain.ValueObjects;
 using ULearn.Infrastructure.Data;
 
 namespace ULearn.Infrastructure.Repositories;
@@ -15,11 +16,34 @@ public class QuizRepository : IQuizRepository
     private readonly ULearnDbContext _db;
     public QuizRepository(ULearnDbContext db) => _db = db;
 
-    public async Task<Quiz?> GetWithQuestionsAsync(Guid quizId) => await _db.Quizzes
+    public async Task<Quiz?> GetQuizWithQuestionsAsync(Guid quizId) => await _db.Quizzes
             .Include(q => q.Questions).ThenInclude(qq => qq.Options)
             .FirstOrDefaultAsync(q => q.Id == quizId);
 
-    public async Task<QuizAttempt?> StartAttemptAsync(Guid userId,Guid quizId)
+    public async Task<List<Quiz>> GetQuizzes(Guid lessonId, bool includeQuestion = false, bool includeQuestionOption = false)
+    {
+        var query = _db.Quizzes.AsNoTracking()
+            .Where(q => q.LessonId == lessonId)
+            .AsQueryable();
+
+        if (includeQuestion)
+        {
+            query = query.Include(q => q.Questions);
+
+            if (includeQuestionOption)
+            {
+                query = query.Include(q => q.Questions).ThenInclude(qq => qq.Options);
+            }
+        }
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<QuizQuestion>> GetQuestions(Guid quizId)
+    {
+        return await _db.QuizQuestions.AsNoTracking().Include(q=>q.Options).Where(q => q.QuizId == quizId).ToListAsync();
+    }
+
+    public async Task<QuizAttempt?> StartAttemptAsync(Guid userId, Guid quizId)
     {
         var quiz = await _db.Quizzes.FindAsync(quizId);
         if (quiz == null) return null;
@@ -58,7 +82,9 @@ public class QuizRepository : IQuizRepository
         attempt.Score = await CalculateScoreAsync(attemptId);
         attempt.IsPassed = attempt.Score >= 70; // assuming 70% passing
 
+        _db.QuizAttempts.Update(attempt);
         await _db.SaveChangesAsync();
+
         return attempt;
     }
 

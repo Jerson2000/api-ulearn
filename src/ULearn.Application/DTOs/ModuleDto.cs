@@ -1,5 +1,7 @@
 
 
+using ULearn.Application.Interfaces;
+
 namespace ULearn.Application.DTOs;
 
 
@@ -15,4 +17,4 @@ public record CreateModuleRequestDto(
     string Title,
     int OrderIndex,
     string? Description
-);
+):IValidateRequest;

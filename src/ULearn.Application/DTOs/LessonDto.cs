@@ -1,5 +1,6 @@
 
 
+using ULearn.Application.Interfaces;
 using ULearn.Domain.Entities;
 using ULearn.Domain.Enums;
 
@@ -25,4 +26,4 @@ public record CreateLessonRequestDto(
     string? ContentText,
     int? DurationMinutes,
     bool IsPreview
-);
+):IValidateRequest;

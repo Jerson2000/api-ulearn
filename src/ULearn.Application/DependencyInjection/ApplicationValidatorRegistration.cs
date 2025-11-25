@@ -23,6 +23,10 @@ public static class ApplicationValidatorRegistration
         services.AddScoped<IValidator<IFormFile>, IFormFileValidator>();
         
         services.AddCourseValidator(config);
+        services.AddLessonValidator();
+        services.AddModuleValidator();
+        services.AddQuizValidator();
+        services.AddQuestionValidator();
 
         return services;
     }

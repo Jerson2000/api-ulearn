@@ -13,7 +13,7 @@ public record LessonDto(
     string? ContentText,
     int OrderIndex,
     bool IsPreview,
-    Quiz? Quiz,
+    QuizDto? Quiz,
     Assignment? Assignment
 );
 

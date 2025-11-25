@@ -1,6 +1,7 @@
 
 
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ULearn.Api.Extensions;
 using ULearn.Application.DTOs;
@@ -28,16 +29,31 @@ public class QuestionsController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateQuestion([FromRoute] Guid quizId,[FromBody] CreateQuestionRequesDto dto)
+    [Authorize(Roles = "Instructor, Admin")]
+    public async Task<IActionResult> CreateQuestion([FromRoute] Guid quizId, [FromBody] CreateQuestionRequesDto dto)
     {
-        return await _quizService.AddQuestionToQuizAsync(quizId,dto).ToActionResult();
+        return await _quizService.AddQuestionToQuizAsync(quizId, dto).ToActionResult();
     }
 
-
-    [HttpPost("{questioId}")]
-    public async Task<IActionResult> CreateQuestionOption([FromRoute] Guid questioId,[FromBody] CreateQuestionOptionRequestDto dto)
+    [HttpPut("{questionId}")]
+    [Authorize(Roles = "Instructor, Admin")]
+    public async Task<IActionResult> UpdateQuestion([FromRoute] Guid questionId, [FromBody] CreateQuestionRequesDto dto)
     {
-        return await _quizService.AddQuestionOptionToQuestion(questioId,dto).ToActionResult();
+        return await _quizService.UpdateQuestionAsync(questionId, dto).ToActionResult();
+    }
+
+    [HttpPost("{questionId}/options")]
+    [Authorize(Roles = "Instructor, Admin")]
+    public async Task<IActionResult> CreateQuestionOption([FromRoute] Guid questionId, [FromBody] CreateQuestionOptionRequestDto dto)
+    {
+        return await _quizService.AddQuestionOptionToQuestion(questionId, dto).ToActionResult();
+    }
+
+    [HttpPut("{questioId}/options/{optionId}")]
+    [Authorize(Roles = "Instructor, Admin")]
+    public async Task<IActionResult> UpdateQuestionOption([FromRoute] Guid optionId, [FromBody] CreateQuestionOptionRequestDto dto)
+    {
+        return await _quizService.UpdateQuestionOption(optionId, dto).ToActionResult();
     }
 
 }

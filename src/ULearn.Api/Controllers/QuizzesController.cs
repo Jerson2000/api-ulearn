@@ -1,5 +1,6 @@
 
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ULearn.Api.Extensions;
 using ULearn.Application.DTOs;
@@ -34,9 +35,17 @@ public class QuizzesController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateQuiz([FromRoute] Guid lessonId,[FromBody] CreateQuizRequestDto dto)
+    [Authorize(Roles = "Instructor, Admin")]
+    public async Task<IActionResult> CreateQuiz([FromRoute] Guid lessonId, [FromBody] CreateQuizRequestDto dto)
     {
-        return await _quizService.AddQuizToLessonAsync(lessonId,dto).ToActionResult();
+        return await _quizService.AddQuizToLessonAsync(lessonId, dto).ToActionResult();
+    }
+
+    [HttpPut("{quizId}")]
+    [Authorize(Roles = "Instructor, Admin")]
+    public async Task<IActionResult> UpdateQuiz([FromRoute] Guid quizId, [FromBody] CreateQuizRequestDto dto)
+    {
+        return await _quizService.UpdateQuizAsync(quizId, dto).ToActionResult();
     }
 
 

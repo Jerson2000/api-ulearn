@@ -10,7 +10,7 @@ public static class LessonMapper
 {
     public static LessonDto ToLessonDto(this Lesson lesson)
     {
-        return new LessonDto(lesson.Id, lesson.Title, lesson.ContentType, lesson.ContentUrl, lesson.ContentText, lesson.OrderIndex, lesson.IsPreview, lesson.Quiz, lesson.Assignment);
+        return new LessonDto(lesson.Id, lesson.Title, lesson.ContentType, lesson.ContentUrl, lesson.ContentText, lesson.OrderIndex, lesson.IsPreview, lesson.Quiz?.ToQuizDto(), lesson.Assignment);
     }
 
     public static List<LessonDto> ToLessonDtoList(this List<Lesson> list)

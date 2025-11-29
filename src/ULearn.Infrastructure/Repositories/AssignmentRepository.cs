@@ -12,6 +12,16 @@ public class AssignmentRepository : IAssignmentRepository
     private readonly ULearnDbContext _db;
     public AssignmentRepository(ULearnDbContext db) => _db = db;
 
+    public async Task<List<Assignment>> GetAssignemnts(Guid lessonId)
+    {
+        return await _db.Assignments.AsNoTracking().Where(x=>x.LessonId == lessonId).ToListAsync();
+    }
+
+    public async Task<Assignment?> GetAssignmentWithSubmissions(Guid assignmentId)
+    {
+        return await _db.Assignments.AsNoTracking().Include(x=>x.Submissions).ThenInclude(xx=>xx.User).FirstOrDefaultAsync(x=>x.Id == assignmentId);
+    }
+
     public async Task<AssignmentSubmission?> SubmitAsync(Guid assignmentId,Guid userId, string fileUrl, string? text)
     {
         var existing = await _db.AssignmentSubmissions.AsNoTracking().FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.UserId == userId);

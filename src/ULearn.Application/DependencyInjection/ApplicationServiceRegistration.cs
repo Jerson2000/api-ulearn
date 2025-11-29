@@ -19,6 +19,7 @@ public static class ApplicationServiceRegistration
         services.AddScoped<IModuleService,ModuleService>();
         services.AddScoped<ILessonService,LessonService>();
         services.AddScoped<IQuizService,QuizService>();
+        services.AddScoped<IAssignmentService,AssignmentService>();
         #endregion
 
         services.AddValidatorsRegistration(config);

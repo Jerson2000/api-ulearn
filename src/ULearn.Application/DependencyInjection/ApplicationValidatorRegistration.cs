@@ -27,6 +27,7 @@ public static class ApplicationValidatorRegistration
         services.AddModuleValidator();
         services.AddQuizValidator();
         services.AddQuestionValidator();
+        services.AddAssignmentValidator();
 
         return services;
     }

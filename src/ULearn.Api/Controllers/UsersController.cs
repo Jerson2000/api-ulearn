@@ -28,6 +28,7 @@ public class UsersController(IUserService userService) : BaseController
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
     {
         var user = await _userService.CreateAsync(dto);

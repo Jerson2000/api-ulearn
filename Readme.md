@@ -87,4 +87,42 @@ Aims to demonstrate the **Domain Driven Design Architecture (DDD)** and best pra
 - **POST** `/api/files/upload/batch` → Upload multiple files  
 - **GET** `/api/files/hehe` → Test file service endpoint (dev only)  
 
+
+## Local Development Setup
+
+These instructions will help you run api-ulearn on your local machine for development and testing.
+
+### Prerequisites
+
+- .NET SDK 9
+- A supported IDE or code editor (e.g. Visual Studio, VS Code)  
+- A copy of the `.env.example` file (rename to `.env`) for local config — update any necessary environment variables  
+
+### Steps
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Jerson2000/api-ulearn.git
+cd api-ulearn
+
+# 2. Copy env example and edit .env
+cp .env.example .env
+# Open .env and configure any required settings (e.g. database connection string, secrets, etc.)
+
+# 3. Restore dependencies and build the solution
+# If using the .NET CLI:
+dotnet restore
+dotnet build
+
+# 4. Run database migrations / setup (if applicable)
+# e.g.
+# dotnet ef database update
+
+# 5. Start the application locally
+dotnet watch run --project ULearn.API
+
+# 6. The API should now be running on localhost:5281 or  localhost:5281/swagger
+
+```
 ---
+

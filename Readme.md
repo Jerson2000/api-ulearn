@@ -119,7 +119,7 @@ dotnet build
 # dotnet ef database update
 
 # 5. Start the application locally
-dotnet watch run --project ULearn.API
+dotnet watch run --project src/ULearn.API
 
 # 6. The API should now be running on localhost:5281 or  localhost:5281/swagger
 

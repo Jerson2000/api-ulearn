@@ -2,7 +2,7 @@
 
 namespace ULearn.Domain.Enums;
 
-public enum ErroCodeEnum
+public enum ErrorCodeEnum
 {
     Ok = 200,
 

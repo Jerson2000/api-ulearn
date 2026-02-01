@@ -63,11 +63,11 @@ public static class ResultExtensions
     {
         return result.Error.Code switch
         {
-            ErroCodeEnum.BadRequest => new BadRequestObjectResult(result.Error),
-            ErroCodeEnum.Unauthorized => new UnauthorizedObjectResult(result.Error),
-            ErroCodeEnum.Forbidden => new ObjectResult(result.Error) { StatusCode = 403 },
-            ErroCodeEnum.NotFound => new NotFoundObjectResult(result.Error),
-            ErroCodeEnum.InternalServerError => new ObjectResult(new { status = 500, message = "Something went wrong." }) { StatusCode = 500 },
+            ErrorCodeEnum.BadRequest => new BadRequestObjectResult(result.Error),
+            ErrorCodeEnum.Unauthorized => new UnauthorizedObjectResult(result.Error),
+            ErrorCodeEnum.Forbidden => new ObjectResult(result.Error) { StatusCode = 403 },
+            ErrorCodeEnum.NotFound => new NotFoundObjectResult(result.Error),
+            ErrorCodeEnum.InternalServerError => new ObjectResult(new { status = 500, message = "Something went wrong." }) { StatusCode = 500 },
             _ => new ObjectResult(new { status = 500, message = "Something went wrong." }) { StatusCode = 500 }
         };
     }

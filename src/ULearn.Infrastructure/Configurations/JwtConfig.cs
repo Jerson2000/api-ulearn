@@ -53,13 +53,13 @@ public static class JwtConfig
                     context.HandleResponse();
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     await context.Response.WriteAsJsonAsync(new Error(
-                        ErroCodeEnum.Unauthorized,
+                        ErrorCodeEnum.Unauthorized,
                         "Unauthorized"
                     ));
                 },
                 OnForbidden = context =>
                 {
-                    return context.Response.WriteAsJsonAsync(new Error(ErroCodeEnum.Forbidden, "Forbidden"));
+                    return context.Response.WriteAsJsonAsync(new Error(ErrorCodeEnum.Forbidden, "Forbidden"));
                 },
                 OnTokenValidated = ctx =>
                 {

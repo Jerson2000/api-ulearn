@@ -4,20 +4,20 @@ namespace ULearn.Domain.Shared
 {
     public class Error : IEquatable<Error>
     {
-        public static readonly Error None = new(ErroCodeEnum.Ok, string.Empty);
-        public static readonly Error NullValue = new(ErroCodeEnum.NullValueError, "The specified result value is null.");
+        public static readonly Error None = new(ErrorCodeEnum.Ok, string.Empty);
+        public static readonly Error NullValue = new(ErrorCodeEnum.NullValueError, "The specified result value is null.");
 
-        public Error(ErroCodeEnum code, string message)
+        public Error(ErrorCodeEnum code, string message)
         {
             Code = code;
             Message = message;
         }
 
-        public ErroCodeEnum Code { get; }
+        public ErrorCodeEnum Code { get; }
 
         public string Message { get; }
 
-        public static implicit operator ErroCodeEnum(Error error) => error.Code;
+        public static implicit operator ErrorCodeEnum(Error error) => error.Code;
 
         public static bool operator ==(Error? a, Error? b)
         {

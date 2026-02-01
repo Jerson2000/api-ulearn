@@ -22,7 +22,7 @@ public class StorageService : IStorageAppService
     {
         var storage = _serviceProvider.GetKeyedService<IStorageService>("local");
         if (storage == null)
-            return Result.Failure<StorageResponseDto>(new Error(Domain.Enums.ErroCodeEnum.BadRequest, "Local storage service not found!"));
+            return Result.Failure<StorageResponseDto>(new Error(Domain.Enums.ErrorCodeEnum.BadRequest, "Local storage service not found!"));
 
         await using var stream = requestDto.File.OpenReadStream();
 
@@ -38,7 +38,7 @@ public class StorageService : IStorageAppService
     {
         var storage = _serviceProvider.GetKeyedService<IStorageService>("local");
         if (storage == null)
-            return Result.Failure<List<StorageResponseDto>>(new Error(Domain.Enums.ErroCodeEnum.BadRequest, "Local storage service not found!"));
+            return Result.Failure<List<StorageResponseDto>>(new Error(Domain.Enums.ErrorCodeEnum.BadRequest, "Local storage service not found!"));
 
 
         var list = new List<StorageResponseDto>();

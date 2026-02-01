@@ -33,7 +33,7 @@ public class LocalStorageService : IStorageService
     {
         try
         {
-            if (string.IsNullOrEmpty(uploadsFolder)) return Result.Failure<StorageFile>(Domain.Enums.ErroCodeEnum.InternalServerError, "Upload directory is not found or missing.");
+            if (string.IsNullOrEmpty(uploadsFolder)) return Result.Failure<StorageFile>(Domain.Enums.ErrorCodeEnum.InternalServerError, "Upload directory is not found or missing.");
 
             var storageFileName = $"{new Random().Next(1000000)}_{fileName}";
             var filePath = Path.Combine(uploadsFolder, storageFileName);
@@ -45,7 +45,7 @@ public class LocalStorageService : IStorageService
         }
         catch (Exception ex)
         {
-            return Result.Failure<StorageFile>(Domain.Enums.ErroCodeEnum.InternalServerError, $"An unexpected error occured: {ex.Message}");
+            return Result.Failure<StorageFile>(Domain.Enums.ErrorCodeEnum.InternalServerError, $"An unexpected error occured: {ex.Message}");
         }
 
     }

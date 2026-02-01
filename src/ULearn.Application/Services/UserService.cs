@@ -22,7 +22,7 @@ public class UserService(IUserRepository repository, IEmailService emailService)
     public async Task<Result> DeleteAsync(Guid id)
     {
         var user = _repository.GetByIdAsync(id);
-        if (user is null) Result.Failure(new Error(ErroCodeEnum.BadRequest, "Couldn't delete."));
+        if (user is null) Result.Failure(new Error(ErrorCodeEnum.BadRequest, "Couldn't delete."));
         await _repository.DeleteAsync(id);
         return Result.Success();
     }
@@ -52,7 +52,7 @@ public class UserService(IUserRepository repository, IEmailService emailService)
     public async Task<Result> UpdateAsync(Guid id, CreateUserDto dto)
     {
         var exist = await _repository.GetByIdAsync(id);
-        if (exist is null) Result.Failure(new Error(ErroCodeEnum.BadRequest, "Couldn't update."));        
+        if (exist is null) Result.Failure(new Error(ErrorCodeEnum.BadRequest, "Couldn't update."));        
         await _repository.UpdateAsync(dto.DtoToUserEntity(id));
         return Result.Success();
     }

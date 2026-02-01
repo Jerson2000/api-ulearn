@@ -23,7 +23,7 @@ public class AuthService(IUserRepository userRepository, ITokenService tokenServ
         var user = await _userRepository.GetByEmailAsync(dto.Email);
 
         if (user is null || !BBCrypt.Verify(dto.Password, user.Password))
-            return Result.Failure<AuthResponse>(ErroCodeEnum.BadRequest, "Wrong Email/Password!");
+            return Result.Failure<AuthResponse>(ErrorCodeEnum.BadRequest, "Wrong Email/Password!");
 
         var (access, refresh) = await _tokenService.GenerateJWTToken(user);
         var response = new AuthResponse(access, refresh);
@@ -35,7 +35,7 @@ public class AuthService(IUserRepository userRepository, ITokenService tokenServ
     {
         var userExist = await _userRepository.GetByEmailAsync(dto.Email);
         if (userExist is not null)
-            return Result.Failure<AuthResponse>(ErroCodeEnum.BadRequest, "Please choose another email!");
+            return Result.Failure<AuthResponse>(ErrorCodeEnum.BadRequest, "Please choose another email!");
 
         var hashPassword = BBCrypt.HashPassword(dto.Password);
         var newUser = new User { FirstName = dto.FirstName, LastName = dto.LastName, Email = dto.Email, Password = hashPassword };
@@ -58,7 +58,7 @@ public class AuthService(IUserRepository userRepository, ITokenService tokenServ
         catch (Exception ex)
         {
             _logger.LogError($"Unexpected error: {ex.Message}");
-            return Result.Failure<AuthResponse>(ErroCodeEnum.Unauthorized, "Unauthorized");
+            return Result.Failure<AuthResponse>(ErrorCodeEnum.Unauthorized, "Unauthorized");
         }
 
     }

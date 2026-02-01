@@ -11,7 +11,7 @@ namespace ULearn.Api.Middlewares
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            var resObj = new Error(Domain.Enums.ErroCodeEnum.InternalServerError, "Something went wrong!");
+            var resObj = new Error(Domain.Enums.ErrorCodeEnum.InternalServerError, "Something went wrong!");
             httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
             await httpContext.Response.WriteAsJsonAsync(resObj, cancellationToken).ConfigureAwait(false);
             return true;

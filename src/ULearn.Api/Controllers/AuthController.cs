@@ -59,7 +59,7 @@ public class AuthController(IAuthService authService, IAntiforgery antiforgery) 
 
         if (string.IsNullOrWhiteSpace(refreshToken) || string.IsNullOrEmpty(expiredAccessToken))
         {
-            return Unauthorized(new Error(ErroCodeEnum.Unauthorized, "Missing refresh token"));
+            return Unauthorized(new Error(ErrorCodeEnum.Unauthorized, "Missing refresh token"));
         }
 
         var result = await _authService.Refresh(refreshToken, expiredAccessToken);

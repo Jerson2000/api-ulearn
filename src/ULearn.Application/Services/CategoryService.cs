@@ -25,7 +25,7 @@ public class CategoryService : ICategoryService
 
 
         if (exists.Count != 0)
-            return Result.Failure<Guid>(Domain.Enums.ErroCodeEnum.BadRequest, "Category name already exists.");
+            return Result.Failure<Guid>(Domain.Enums.ErrorCodeEnum.BadRequest, "Category name already exists.");
 
         var category = new Category
         {
@@ -63,14 +63,14 @@ public class CategoryService : ICategoryService
         var category = await _uow.Repository<Category>().GetByIdAsync(id);
 
         if (category == null)
-            return Result.Failure<Result>(Domain.Enums.ErroCodeEnum.BadRequest, "Category not found");
+            return Result.Failure<Result>(Domain.Enums.ErrorCodeEnum.BadRequest, "Category not found");
 
 
         var duplicate = await _uow.Repository<Category>()
             .ListAsync(c => c.Name.Trim().Equals(request.Name.Trim(), StringComparison.CurrentCultureIgnoreCase) && c.Id != id);
 
         if (duplicate.Count != 0)
-            return Result.Failure<Guid>(Domain.Enums.ErroCodeEnum.BadRequest, "Category name already exists.");
+            return Result.Failure<Guid>(Domain.Enums.ErrorCodeEnum.BadRequest, "Category name already exists.");
 
         category.Name = request.Name.Trim();
         category.Description = request.Description?.Trim() ?? string.Empty;

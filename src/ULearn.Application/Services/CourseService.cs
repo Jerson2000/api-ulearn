@@ -115,10 +115,10 @@ public class CourseService : ICourseService
     public async Task<Result> EnrollAsync(Guid userId, Guid courseId)
     {
         if (userId == Guid.Empty)
-            return Result.Failure<Result>(Domain.Enums.ErroCodeEnum.Unauthorized, "Unauthorized.");
+            return Result.Failure<Result>(Domain.Enums.ErrorCodeEnum.Unauthorized, "Unauthorized.");
 
         if (await _uow.Enrollments.IsEnrolledAsync(userId, courseId))
-            return Result.Failure<Result>(Domain.Enums.ErroCodeEnum.BadRequest, "Already enrolled.");
+            return Result.Failure<Result>(Domain.Enums.ErrorCodeEnum.BadRequest, "Already enrolled.");
 
         await _uow.Enrollments.EnrollAsync(userId, courseId);
         await _uow.SaveChangesAsync();

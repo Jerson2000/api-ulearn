@@ -33,7 +33,7 @@ namespace ULearn.Api.Middlewares
                 catch (AntiforgeryValidationException)
                 {
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    await context.Response.WriteAsJsonAsync(new Error(Domain.Enums.ErroCodeEnum.BadRequest, "Invalid token."));
+                    await context.Response.WriteAsJsonAsync(new Error(Domain.Enums.ErrorCodeEnum.BadRequest, "Invalid token."));
                     return;
                 }
             }

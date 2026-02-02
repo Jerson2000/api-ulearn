@@ -8,10 +8,9 @@ using ULearn.Domain.Shared;
 
 namespace ULearn.Application.Services;
 
-public class UserService(IUserRepository repository, IEmailService emailService) : IUserService
+public class UserService(IUserRepository repository) : IUserService
 {
     private readonly IUserRepository _repository = repository;
-    private readonly IEmailService _emailService = emailService;
     public async Task<Result<Guid>> CreateAsync(CreateUserDto dto)
     {
         var user = dto.DtoToUserEntity();

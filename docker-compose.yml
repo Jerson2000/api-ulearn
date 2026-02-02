@@ -1,0 +1,43 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ulearn-api
+    ports:
+      - "5000:8080"
+      - "5001:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DB_CONNECTION=${DB_CONNECTION_DEV}
+      - JWT_KEY=${JWT_KEY_DEV}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ulearn-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: ulearn-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD_DEV}      
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+    networks:
+      - ulearn-network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"${MSSQL_SA_PASSWORD_DEV}\" -Q 'SELECT 1' -C || exit 1"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
+networks:
+  ulearn-network:
+    driver: bridge
+
+volumes:
+  sqlvolume:

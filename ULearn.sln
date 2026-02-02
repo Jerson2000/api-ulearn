@@ -9,11 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ULearn.Application", "src\U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ULearn.Infrastructure", "src\ULearn.Infrastructure\ULearn.Infrastructure.csproj", "{4809BCD7-03C2-4098-8ED8-AE6C75AB23C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ULearn.API", "src\ULearn.API\ULearn.API.csproj", "{08ABB3C8-55C1-478C-A6FD-92CEE9CBAE28}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ULearn.Api", "src\ULearn.Api\ULearn.Api.csproj", "{08ABB3C8-55C1-478C-A6FD-92CEE9CBAE28}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ulearn.UnitTests", "tests\Ulearn.UnitTests\Ulearn.UnitTests.csproj", "{7B6CDFD7-7C08-46D5-8F83-247AD2976B2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ULearn.UnitTests", "tests\ULearn.UnitTests\ULearn.UnitTests.csproj", "{7B6CDFD7-7C08-46D5-8F83-247AD2976B2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
